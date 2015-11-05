@@ -1,4 +1,7 @@
-# yaw, rool, pitch's unit is in 0.1 degree
+# yaw, roll, pitch's unit is in 0.1 degree
+# yaw  [-3200, 3200]
+# roll [-350, 350]
+# pitch  [-900, 300]
 # duration's unit in 0.1s 
 
 int16 yaw

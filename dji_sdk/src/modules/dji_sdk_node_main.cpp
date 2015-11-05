@@ -3,9 +3,14 @@
 
 #define DEG2RAD(DEG) ((DEG)*((C_PI)/(180.0)))
 
-//----------------------------------------------------------
-// timer spin_function 50Hz
-//----------------------------------------------------------
+void DJISDKNode::transparent_transmission_callback(unsigned char *buf, unsigned char len)
+{
+    dji_sdk::TransparentTransmissionData transparent_transmission_data;
+    transparent_transmission_data.data.resize(len);
+    memcpy(&transparent_transmission_data.data[0], buf, len);
+    data_received_from_remote_device_publisher.publish(transparent_transmission_data);
+}
+
 void DJISDKNode::broadcast_callback()
 {
     sdk_std_msg_t recv_sdk_std_msgs;
@@ -250,7 +255,8 @@ int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     }
     
     DJI_Pro_Activate_API(&user_act_data, NULL);
-    DJI_Pro_Register_Broadcast_Callback(std::bind(&DJISDKNode::broadcast_callback, this));
+    DJI_Pro_Register_Broadcast_Callback(boost::bind(&DJISDKNode::broadcast_callback, this));
+    DJI_Pro_Register_Transparent_Transmission_Callback(boost::bind(&DJISDKNode::transparent_transmission_callback, this, _1, _2));
 
     return 0;
 }

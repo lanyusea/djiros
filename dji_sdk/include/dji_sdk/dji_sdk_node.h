@@ -40,6 +40,7 @@ private:
 //internal variables
     char app_key[65];
     activate_data_t user_act_data;
+    unsigned char transparent_transmission_data[100];
 
 //Publishers:
     ros::Publisher acceleration_publisher;
@@ -56,6 +57,7 @@ private:
     ros::Publisher activation_publisher;
     ros::Publisher odometry_publisher;
     ros::Publisher sdk_permission_publisher;
+    ros::Publisher data_received_from_remote_device_publisher;
 
     void init_publishers(ros::NodeHandle& nh)
     {
@@ -74,6 +76,7 @@ private:
         activation_publisher = nh.advertise<std_msgs::UInt8>("activation", 10);
         odometry_publisher = nh.advertise<nav_msgs::Odometry>("odometry",10);
         sdk_permission_publisher = nh.advertise<std_msgs::UInt8>("sdk_permission", 10);
+        data_received_from_remote_device_publisher = nh.advertise<dji_sdk::TransparentTransmissionData>("data_received_from_remote_device", 10);
     }
 
 //Services:
@@ -86,6 +89,7 @@ private:
     ros::ServiceServer local_position_control_service;
     ros::ServiceServer sdk_permission_control_service;
     ros::ServiceServer velocity_control_service;
+    ros::ServiceServer send_data_to_remote_device_service;
 
     bool attitude_control_callback(dji_sdk::AttitudeControl::Request& request, dji_sdk::AttitudeControl::Response& response);
     bool camera_action_control_callback(dji_sdk::CameraActionControl::Request& request, dji_sdk::CameraActionControl::Response& response);
@@ -96,6 +100,7 @@ private:
     bool local_position_control_callback(dji_sdk::LocalPositionControl::Request& request, dji_sdk::LocalPositionControl::Response& response);
     bool sdk_permission_control_callback(dji_sdk::SDKPermissionControl::Request& request, dji_sdk::SDKPermissionControl::Response& response);
     bool velocity_control_callback(dji_sdk::VelocityControl::Request& request, dji_sdk::VelocityControl::Response& response);
+    bool send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDevice::Request& request, dji_sdk::SendDataToRemoteDevice::Response& response);
 
     void init_services(ros::NodeHandle& nh)
     {
@@ -108,6 +113,7 @@ private:
         local_position_control_service = nh.advertiseService("local_position_control", &DJISDKNode::local_position_control_callback, this);
         sdk_permission_control_service = nh.advertiseService("sdk_permission_control", &DJISDKNode::sdk_permission_control_callback, this);
         velocity_control_service = nh.advertiseService("velocity_control", &DJISDKNode::velocity_control_callback, this);
+        send_data_to_remote_device_service = nh.advertiseService("send_data_to_remote_device", &DJISDKNode::send_data_to_remote_device_callback, this);
     }
 
 //Actions:
@@ -167,6 +173,7 @@ public:
 private:
     int init_parameters_and_activate(ros::NodeHandle& nh_private);
     void broadcast_callback();
+    void transparent_transmission_callback(unsigned char *buf, unsigned char len);
 
     bool process_waypoint(dji_sdk::Waypoint new_waypoint);
 

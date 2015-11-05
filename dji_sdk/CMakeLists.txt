@@ -65,6 +65,7 @@ add_message_files(
   Velocity.msg
   Waypoint.msg
   WaypointList.msg
+  TransparentTransmissionData.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -79,6 +80,7 @@ add_service_files(
   LocalPositionControl.srv
   SDKPermissionControl.srv
   VelocityControl.srv
+  SendDataToRemoteDevice.srv
 )
 
 ## Generate actions in the 'action' folder
