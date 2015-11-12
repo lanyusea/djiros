@@ -35,8 +35,7 @@ int main(int argc, char **argv)
     int temp32;
     bool valid_flag = false;
     bool err_flag = false;
-    ros::init(argc, argv, "sdk_client");
-    ROS_INFO("sdk_service_client_test");
+    ros::init(argc, argv, "dji_sdk_client");
     ros::NodeHandle nh;
     DJIDrone* drone = new DJIDrone(nh);
 

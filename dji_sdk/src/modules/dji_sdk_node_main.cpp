@@ -252,7 +252,7 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
     init_parameters_and_activate(nh_private);
 }
 
-inline void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
+void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
             double gps_t_lon, double gps_t_lat,
             double gps_r_lon, double gps_r_lat)
 {

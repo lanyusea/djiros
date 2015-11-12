@@ -5,7 +5,7 @@
 #include <dji_sdk/dji_sdk_node.h>
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "dji_sdk");
+    ros::init(argc, argv, "dji_sdk_server");
     ros::NodeHandle nh;
     ros::NodeHandle nh_private("~");
 
