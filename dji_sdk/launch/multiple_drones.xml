@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+    <include file="$(find dji_sdk)/launch/onboard_sdk.launch">
+        <arg name="serial_name" value="/dev/ttyUSB0"/>
+        <arg name="name" value="drone1"/>
+    </include>
+    <include file="$(find dji_sdk)/launch/onboard_sdk.launch">
+        <arg name="serial_name" value="/dev/ttyUSB1"/>
+        <arg name="name" value="drone2"/>
+    </include>
+</launch>

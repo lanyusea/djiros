@@ -7,6 +7,7 @@
 #include <boost/bind.hpp>
 #include <dji_sdk/dji_sdk.h>
 #include <actionlib/server/simple_action_server.h>
+#include <tf/transform_broadcaster.h>
 
 #define C_EARTH (double) 6378137.0
 #define C_PI (double) 3.141592653589793
@@ -156,6 +157,9 @@ private:
             boost::bind(&DJISDKNode::waypoint_navigation_action_callback, this, _1), false);
         waypoint_navigation_action_server->start();
     }
+
+//Transform:
+    tf::TransformBroadcaster br;
 
 public:
     DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private);

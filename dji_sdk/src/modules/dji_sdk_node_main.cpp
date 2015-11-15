@@ -1,5 +1,6 @@
 #include <dji_sdk/dji_sdk_node.h>
 #include <functional>
+
 #define DEG2RAD(DEG) ((DEG)*((C_PI)/(180.0)))
 
 //----------------------------------------------------------
@@ -93,12 +94,17 @@ void DJISDKNode::broadcast_callback()
     //update gimbal msg
     if ((msg_flags & ENABLE_MSG_GIMBAL)) {
         gimbal.header.frame_id = "/gimbal";
-        gimbal.header.stamp= current_time;
+        gimbal.header.stamp = current_time;
         gimbal.ts = recv_sdk_std_msgs.time_stamp;
         gimbal.roll = recv_sdk_std_msgs.gimbal.x;
         gimbal.pitch = recv_sdk_std_msgs.gimbal.y;
         gimbal.yaw = recv_sdk_std_msgs.gimbal.z;
         gimbal_publisher.publish(gimbal);
+
+        br.sendTransform(tf::StampedTransform(tf::Transform(
+            tf::Quaternion(gimbal.yaw, gimbal.pitch, gimbal.roll), 
+            tf::Vector3(0, 0, 0)), 
+            current_time, "base_link", "gimbal_link"));
     }
 
     //update odom msg
@@ -119,6 +125,11 @@ void DJISDKNode::broadcast_callback()
         odometry.twist.twist.linear.y = velocity.vy;
         odometry.twist.twist.linear.z = velocity.vz;
         odometry_publisher.publish(odometry);
+
+        br.sendTransform(tf::StampedTransform(tf::Transform(
+            tf::Quaternion(attitude_quaternion.q0, attitude_quaternion.q1, attitude_quaternion.q2, attitude_quaternion.q3), 
+            tf::Vector3(local_position.x, local_position.y, local_position.z)), 
+            current_time, "world", "base_link"));
     }
 
     //update rc_channel msg

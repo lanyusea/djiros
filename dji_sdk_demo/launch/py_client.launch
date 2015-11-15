@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="dji_sdk_demo" type="client.py" name="dji_sdk_client" output="screen">
+	</node>
+</launch>
