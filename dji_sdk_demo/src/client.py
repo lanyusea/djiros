@@ -156,24 +156,24 @@ def main():
             V = 2
             # start to draw circle 
             for i in range(300):
-                vx = V * math.sin((V/R)*i/50.0)
-                vy = V * math.cos((V/R)*i/50.0)
+                vx = V * math.sin((V / R) * i/50.0)
+                vy = V * math.cos((V / R) * i/50.0)
     
-                drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.YAW_BODY, vx, vy, 0, 0)
+                drone.attitude_control(DJIDrone.HORIZ_VEL | DJIDrone.VERT_VEL | DJIDrone.YAW_ANG | DJIDrone.HORIZ_BODY | DJIDrone.YAW_BODY, vx, vy, 0, 0)
                 time.sleep(0.02)
         elif main_operate_code == 'i':
             # draw square sample
             for i in range(60):
-                drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.YAW_BODY, 3, 3, 0, 0)
+                drone.attitude_control(DJIDrone.HORIZ_POS | DJIDrone.VERT_VEL | DJIDrone.YAW_ANG | DJIDrone.HORIZ_BODY | DJIDrone.YAW_BODY, 3, 3, 0, 0)
                 time.sleep(0.02)
             for i in range(60):
-                drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.YAW_BODY, -3, 3, 0, 0)
+                drone.attitude_control(DJIDrone.HORIZ_POS | DJIDrone.VERT_VEL | DJIDrone.YAW_ANG | DJIDrone.HORIZ_BODY | DJIDrone.YAW_BODY, -3, 3, 0, 0)
                 time.sleep(0.02)
             for i in range(60):
-                drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.YAW_BODY, -3, -3, 0, 0)
+                drone.attitude_control(DJIDrone.HORIZ_POS | DJIDrone.VERT_VEL | DJIDrone.YAW_ANG | DJIDrone.HORIZ_BODY | DJIDrone.YAW_BODY, -3, -3, 0, 0)
                 time.sleep(0.02)
             for i in range(60):
-                drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.YAW_BODY, 3, -3, 0, 0)
+                drone.attitude_control(DJIDrone.HORIZ_POS | DJIDrone.VERT_VEL | DJIDrone.YAW_ANG | DJIDrone.HORIZ_BODY | DJIDrone.YAW_BODY, 3, -3, 0, 0)
                 time.sleep(0.02)
         elif main_operate_code == 'j':
             # take a picture

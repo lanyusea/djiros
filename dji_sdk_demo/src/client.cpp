@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 
             case 'h':
                 /*draw circle sample*/
-                static float time = 0;
+                static float t = 0;
                 static float R = 2;
                 static float V = 2;
                 static float vx;
@@ -235,12 +235,12 @@ int main(int argc, char **argv)
                 /* start to draw circle */
                 for(int i = 0; i < 300; i ++)
                 {
-                    vx = V * sin((V/R)*time/50.0f);
-                    vy = V * cos((V/R)*time/50.0f);
+                    vx = V * sin((V / R) * t / 50.0f);
+                    vy = V * cos((V / R) * t / 50.0f);
         
-                    drone->attitude_control(HORIZ_POS|VERT_VEL|YAW_ANG|HORIZ_BODY|YAW_BODY, vx, vy, 0, 0);
+                    drone->attitude_control(HORIZ_VEL | VERT_VEL | YAW_ANG | HORIZ_BODY | YAW_BODY, vx, vy, 0, 0);
                     usleep(20000);
-                    time++;
+                    t++;
                 }
                 break;
 
@@ -248,22 +248,22 @@ int main(int argc, char **argv)
                 /*draw square sample*/
                 for(int i = 0;i < 60;i++)
                 {
-                    drone->attitude_control(HORIZ_POS|VERT_VEL|YAW_ANG|HORIZ_BODY|YAW_BODY, 3, 3, 0, 0);
+                    drone->attitude_control(HORIZ_POS | VERT_VEL | YAW_ANG | HORIZ_BODY | YAW_BODY, 3, 3, 0, 0);
                     usleep(20000);
                 }
                 for(int i = 0;i < 60;i++)
                 {
-                    drone->attitude_control(HORIZ_POS|VERT_VEL|YAW_ANG|HORIZ_BODY|YAW_BODY, -3, 3, 0, 0);
+                    drone->attitude_control(HORIZ_POS | VERT_VEL | YAW_ANG | HORIZ_BODY | YAW_BODY, -3, 3, 0, 0);
                     usleep(20000);
                 }
                 for(int i = 0;i < 60;i++)
                 {
-                    drone->attitude_control(HORIZ_POS|VERT_VEL|YAW_ANG|HORIZ_BODY|YAW_BODY, -3, -3, 0, 0);
+                    drone->attitude_control(HORIZ_POS | VERT_VEL | YAW_ANG | HORIZ_BODY | YAW_BODY, -3, -3, 0, 0);
                     usleep(20000);
                 }
                 for(int i = 0;i < 60;i++)
                 {
-                    drone->attitude_control(HORIZ_POS|VERT_VEL|YAW_ANG|HORIZ_BODY|YAW_BODY, 3, -3, 0, 0);
+                    drone->attitude_control(HORIZ_POS | VERT_VEL | YAW_ANG | HORIZ_BODY | YAW_BODY, 3, -3, 0, 0);
                     usleep(20000);
                 }
                 break;
