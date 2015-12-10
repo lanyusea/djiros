@@ -6,7 +6,7 @@
 
 #define C_PI (double) 3.141592653589793
 
-enum class MissionType 
+enum class MissionType
 {
 	EMPTY,
 	WAYPOINT,
@@ -20,7 +20,7 @@ private:
 	dji_sdk::MissionWaypointTask waypoint_task;
 	dji_sdk::MissionHotpointTask hotpoint_task;
 	dji_sdk::MissionFollowmeTask followme_task;
-	
+
 public:
 	DJISDKMission(ros::NodeHandle& nh);
 private:
@@ -48,7 +48,7 @@ private:
 	//subscriber running when operating followme
 	ros::ServiceServer mission_fm_upload_service;
 	ros::ServiceServer mission_fm_set_target_service;
-	
+
 	MissionType current_type = MissionType::EMPTY;
 
 	bool mission_start_callback(dji_sdk::MissionStart::Request& request, dji_sdk::MissionStart::Response& response);

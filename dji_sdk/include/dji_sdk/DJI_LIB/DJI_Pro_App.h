@@ -233,9 +233,9 @@ typedef struct
 }api_ctrl_info_data_t;
 
 /*
- * struct of gimbal data 
+ * struct of gimbal data
  */
-typedef struct 
+typedef struct
 {
 	fp32 roll;
 	fp32 pitch;
@@ -249,7 +249,7 @@ typedef struct
 /*
  * struct of time stamp data
  */
-typedef struct 
+typedef struct
 {
 	uint32_t time;
 	uint32_t asr_ts;
@@ -277,7 +277,7 @@ typedef struct
 	uint8_t activation;
 }sdk_std_msg_t;
 
-typedef struct 
+typedef struct
 {
 	uint8_t mission_type;
 	uint8_t target_waypoint;
@@ -299,7 +299,7 @@ typedef struct
 	uint8_t mission_type;
 }followme_mission_push_info_t;
 
-typedef struct 
+typedef struct
 {
 	uint8_t mission_type;
 	uint8_t last_mission_type;
@@ -334,7 +334,7 @@ typedef struct
 //----------------------------------------------------------------------
 // App layer function
 //----------------------------------------------------------------------
-typedef struct 
+typedef struct
 {
     unsigned short	sequence_number;
     unsigned char	session_id 	: 5;
@@ -368,7 +368,7 @@ typedef struct
 }cmd_agency_data_t;
 
 //----------------------------------------------------------------------
-// for activation 
+// for activation
 //----------------------------------------------------------------------
 
 /*
@@ -449,9 +449,9 @@ typedef struct
 /*
  * struct of virtual rc manager
  */
-typedef struct 
+typedef struct
 {
-	unsigned char enable:	1; 
+    unsigned char enable:	1;
 	unsigned char if_back_to_real: 1;
 	unsigned char reserve: 	6;
 }virtual_rc_manager_t;
@@ -514,7 +514,7 @@ typedef struct
 	cmd_mission_wp_action_comm_t action;
 }cmd_mission_wp_waypoint_info_comm_t;
 
-/* 
+/*
  * struct of waypoint upload
  */
 typedef struct
@@ -530,11 +530,11 @@ typedef struct
 typedef struct
 {
 	unsigned char version;
-	
+
 	fp64 latitude;
 	fp64 longitude;
 	fp64 altitude;
-	
+
 	fp64 radius;
 	fp32 angular_rate;
 	unsigned char is_clockwise;
@@ -544,10 +544,10 @@ typedef struct
 	unsigned char reserve[11];
 }cmd_mission_hotpoint_setting_t;
 
-/* 
+/*
  * struct of set hp vel
  */
-typedef struct 
+typedef struct
 {
 	unsigned char is_clockwise;
 	fp32 speed;
@@ -565,8 +565,8 @@ typedef struct
 	fp64 initial_longitude;
 	uint16_t	initial_altitude;
 	uint16_t	initial_mag_angle;
-	
-	unsigned char sensitivity;	
+
+    unsigned char sensitivity;
 }cmd_mission_follow_setting_t;
 
 /*
@@ -593,7 +593,7 @@ typedef struct
 	uint8_t data_5;
 }cmd_mission_common_data_t;
 
-typedef struct 
+typedef struct
 {
 	uint8_t ack;
 	uint8_t index;
@@ -618,7 +618,7 @@ typedef struct
 	fp32 idle_vel;
 }cmd_mission_wp_velocity_ack_t;
 
-	
+
 typedef struct
 {
 	uint8_t ack;
@@ -631,7 +631,7 @@ typedef struct
 	cmd_mission_hotpoint_setting_t hotpoint_data;
 }cmd_mission_hp_download_ack_t;
 
-	
+
 #pragma  pack()
 
 typedef std::function<void(unsigned short)> Command_Result_Notify;
