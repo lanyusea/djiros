@@ -47,7 +47,7 @@ private:
     ros::Publisher attitude_quaternion_publisher;
     ros::Publisher compass_publisher;
     ros::Publisher flight_control_info_publisher;
-    ros::Publisher flight_status_publisher; 
+    ros::Publisher flight_status_publisher;
     ros::Publisher gimbal_publisher;
     ros::Publisher global_position_publisher;
     ros::Publisher local_position_publisher;
@@ -133,7 +133,7 @@ private:
 		drone_arm_control_service = nh.advertiseService("dji_sdk/drone_arm_control", &DJISDKNode::drone_arm_control_callback, this);
 		sync_flag_control_service = nh.advertiseService("dji_sdk/sync_flag_control", &DJISDKNode::sync_flag_control_callback, this);
 		message_frequency_control_service = nh.advertiseService("dji_sdk/message_frequency_control", &DJISDKNode::message_frequency_control_callback, this);
-		
+
     }
 
 //Actions:
@@ -148,11 +148,11 @@ private:
     WaypointNavigationActionServer* waypoint_navigation_action_server;
 
     dji_sdk::DroneTaskFeedback drone_task_feedback;
-    dji_sdk::DroneTaskResult drone_task_result; 
-    dji_sdk::LocalPositionNavigationFeedback local_position_navigation_feedback; 
-    dji_sdk::LocalPositionNavigationResult local_position_navigation_result; 
+    dji_sdk::DroneTaskResult drone_task_result;
+    dji_sdk::LocalPositionNavigationFeedback local_position_navigation_feedback;
+    dji_sdk::LocalPositionNavigationResult local_position_navigation_result;
     dji_sdk::GlobalPositionNavigationFeedback global_position_navigation_feedback;
-    dji_sdk::GlobalPositionNavigationResult global_position_navigation_result; 
+    dji_sdk::GlobalPositionNavigationResult global_position_navigation_result;
     dji_sdk::WaypointNavigationFeedback waypoint_navigation_feedback;
     dji_sdk::WaypointNavigationResult waypoint_navigation_result;
 
@@ -163,23 +163,23 @@ private:
 
     void init_actions(ros::NodeHandle& nh)
     {
-        drone_task_action_server = new DroneTaskActionServer(nh, 
-            "dji_sdk/drone_task_action", 
+        drone_task_action_server = new DroneTaskActionServer(nh,
+            "dji_sdk/drone_task_action",
             boost::bind(&DJISDKNode::drone_task_action_callback, this, _1), false);
         drone_task_action_server->start();
 
-        local_position_navigation_action_server = new LocalPositionNavigationActionServer(nh, 
-            "dji_sdk/local_position_navigation_action", 
+        local_position_navigation_action_server = new LocalPositionNavigationActionServer(nh,
+            "dji_sdk/local_position_navigation_action",
             boost::bind(&DJISDKNode::local_position_navigation_action_callback, this, _1), false);
         local_position_navigation_action_server->start();
 
-        global_position_navigation_action_server = new GlobalPositionNavigationActionServer(nh, 
-            "dji_sdk/global_position_navigation_action", 
+        global_position_navigation_action_server = new GlobalPositionNavigationActionServer(nh,
+            "dji_sdk/global_position_navigation_action",
             boost::bind(&DJISDKNode::global_position_navigation_action_callback, this, _1), false );
         global_position_navigation_action_server->start();
 
-        waypoint_navigation_action_server = new WaypointNavigationActionServer(nh, 
-            "dji_sdk/waypoint_navigation_action", 
+        waypoint_navigation_action_server = new WaypointNavigationActionServer(nh,
+            "dji_sdk/waypoint_navigation_action",
             boost::bind(&DJISDKNode::waypoint_navigation_action_callback, this, _1), false);
         waypoint_navigation_action_server->start();
     }

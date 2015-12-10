@@ -10,10 +10,6 @@
 
 #define DJI_SDK_PRO_VER                     0
 
-#define ACK_SESSION_IDLE					0
-#define ACK_SESSION_PROCESS                 1
-#define ACK_SESSION_USING					2
-
 #define POLL_TICK							20  //unit is ms
 
 typedef struct ProHeader

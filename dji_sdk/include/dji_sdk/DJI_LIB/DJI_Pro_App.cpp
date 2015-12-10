@@ -39,9 +39,9 @@ void DJI_Pro_App_Send_Data(unsigned char session_mode, unsigned char is_enc, uns
 	param.buf = Pro_Encode_Data;
     param.retry_time = retry_time;
 
-	param.ack_timeout = timeout; 
+    param.ack_timeout = timeout;
     param.need_encrypt = is_enc;
-	
+
 	Pro_Send_Interface(&param);
 }
 
@@ -50,7 +50,7 @@ void DJI_Pro_App_Send_Ack(req_id_t req_id, unsigned char *ack, int len)
 	ProAckParameter param;
 
 	memcpy(Pro_Encode_ACK,ack,len);
-	
+
 	param.session_id = req_id.session_id;
 	param.seq_num = req_id.sequence_number;
 	param.need_encrypt = req_id.need_encrypt;
@@ -126,8 +126,8 @@ static void * Status_Ctrl_Thread_Func(void * arg)
               || ack_data == REQ_TIME_OUT || ack_data == REQ_REFUSE)
         {
             printf("%s,line %d,Status Ctrl %d: %s. Return error 0x%X\n",__func__,__LINE__,
-            status_ctrl_cmd_data.cmd_data, 
-				&err[((ack_data&0x100)>>7)|(ack_data&0x1)][0],	
+            status_ctrl_cmd_data.cmd_data,
+                &err[((ack_data&0x100)>>7)|(ack_data&0x1)][0],
 				ack_data);
             if(p_status_ctrl_interface)
             {
@@ -591,7 +591,7 @@ static void DJI_Pro_Msgs_Frequency_Set_CallBack(ProHeader *header) {
 		printf("Set Frequency Successfully!\n");
 	else if (ack_data == 0x01)
       printf("Set Frequency Failed\n");
-	else 
+    else
 		printf("Command Failed with Unknown error 0x%x\n", ack_data);
    }
    else
@@ -632,7 +632,7 @@ static void DJI_Pro_Arm_Control_CallBack(ProHeader *header) {
 
 int DJI_Pro_Arm_Control(unsigned char arm_cmd)
 {
-	DJI_Pro_App_Send_Data(2, 1, MY_CTRL_CMD_SET, API_CTRL_ARM, 
+    DJI_Pro_App_Send_Data(2, 1, MY_CTRL_CMD_SET, API_CTRL_ARM,
 						&arm_cmd, sizeof(arm_cmd), DJI_Pro_Arm_Control_CallBack, 100, 1 );
 	return 0;
 
@@ -669,7 +669,7 @@ static void DJI_Pro_Virtual_RC_Manage_CallBack(ProHeader *header) {
 int DJI_Pro_Virtual_RC_Manage(virtual_rc_manager_t *p_rc_manager_data)
 {
 	DJI_Pro_App_Send_Data(2,1, MY_VIRTUAL_RC_CMD_SET, API_VIRTUAL_RC_MANAGER,
-					(unsigned char*)p_rc_manager_data, sizeof(virtual_rc_manager_t), 
+                    (unsigned char*)p_rc_manager_data, sizeof(virtual_rc_manager_t),
 						DJI_Pro_Virtual_RC_Manage_CallBack, 500, 1);
 	return 0;
 }
@@ -687,7 +687,7 @@ int DJI_Pro_Virtual_RC_Send_Value(virtual_rc_data_t *p_rc_value)
 }
 
 
-/* 
+/*
  * interface: init waypoint interface
  */
 static void DJI_Pro_Mission_Waypoint_Upload_Task_CallBack(ProHeader *header) {
@@ -713,7 +713,7 @@ int DJI_Pro_Mission_Waypoint_Upload_Task(cmd_mission_wp_task_info_comm_t *p_task
 	return 0;
 }
 
-/* 
+/*
  * interface: upload waypoint interface
  */
 
@@ -738,7 +738,7 @@ int DJI_Pro_Mission_Waypoint_Upload_Waypoint(cmd_mission_wp_waypoint_upload_comm
 	printf("waypoint uploaded\n");
 	return 0;
 }
-/* 
+/*
  * interface: start/stop waypoint interface
  */
 
@@ -758,7 +758,7 @@ static void DJI_Pro_Mission_Waypoint_Start_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Waypoint_Start(unsigned char start_cmd)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_WP_START,
-						&start_cmd, sizeof(start_cmd), 
+                        &start_cmd, sizeof(start_cmd),
 						DJI_Pro_Mission_Waypoint_Start_CallBack, 100, 1);
     return 0;
 }
@@ -782,7 +782,7 @@ static void DJI_Pro_Mission_Waypoint_Pause_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Waypoint_Pause(unsigned char pause_cmd)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_WP_PAUSE,
-						&pause_cmd, sizeof(pause_cmd), 
+                        &pause_cmd, sizeof(pause_cmd),
 						DJI_Pro_Mission_Waypoint_Pause_CallBack, 100, 1);
     return 0;
 }
@@ -808,7 +808,7 @@ int DJI_Pro_Mission_Waypoint_Download_Task()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_TASK_DOWNLOAD,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Waypoint_Download_Task_CallBack, 100, 1);
     return 0;
 }
@@ -832,7 +832,7 @@ static void DJI_Pro_Mission_Waypoint_Download_Waypoint_CallBack(ProHeader *heade
 int DJI_Pro_Mission_Waypoint_Download_Waypoint(unsigned char index)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_WP_DOWNLOAD,
-						&index, sizeof(index), 
+                        &index, sizeof(index),
 						DJI_Pro_Mission_Waypoint_Download_Waypoint_CallBack, 100, 1);
     return 0;
 }
@@ -856,19 +856,19 @@ static void DJI_Pro_Mission_Waypoint_Set_Idle_Speed_CallBack(ProHeader *header) 
 int DJI_Pro_Mission_Waypoint_Set_Idle_Speed(fp32 vel)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_SET_IDLE_SPEED,
-						(unsigned char*)&vel, sizeof(vel), 
+                        (unsigned char*)&vel, sizeof(vel),
 						DJI_Pro_Mission_Waypoint_Set_Idle_Speed_CallBack, 100, 1);
     return 0;
 }
 /*
  * interface: get idle speed interface
- */ 
+ */
 
 static void DJI_Pro_Mission_Waypoint_Get_Idle_Speed_CallBack(ProHeader *header) {
 	cmd_mission_wp_velocity_ack_t velocity_ack;
    if (header->length - EXC_DATA_SIZE<= sizeof(cmd_mission_wp_velocity_ack_t)) {
 	   memcpy((unsigned char*)&velocity_ack, (unsigned char*) &header -> magic, (header -> length -EXC_DATA_SIZE));
-		
+
 	   printf("ACK of get speed: %x with value: %f\n", velocity_ack.ack,velocity_ack.idle_vel);
    }
 	else
@@ -882,7 +882,7 @@ int DJI_Pro_Mission_Waypoint_Get_Idle_Speed()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_GET_IDLE_SPEED,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Waypoint_Get_Idle_Speed_CallBack, 100, 1);
     return 0;
 }
@@ -905,13 +905,13 @@ static void DJI_Pro_Mission_Hotpoint_Start_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Hotpoint_Start(cmd_mission_hotpoint_setting_t *p_hotpoint_data)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_START,
-						(unsigned char*)p_hotpoint_data, sizeof(cmd_mission_hotpoint_setting_t), 
+                        (unsigned char*)p_hotpoint_data, sizeof(cmd_mission_hotpoint_setting_t),
 						DJI_Pro_Mission_Hotpoint_Start_CallBack, 100, 1);
     return 0;
 }
 /*
- * interface: stop hot point interface 
- */ 
+ * interface: stop hot point interface
+ */
 
 static void DJI_Pro_Mission_Hotpoint_Stop_CallBack(ProHeader *header) {
    unsigned short ack_data = 0xFF;
@@ -930,7 +930,7 @@ int DJI_Pro_Mission_Hotpoint_Stop()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_STOP,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Hotpoint_Stop_CallBack, 100, 1);
     return 0;
 }
@@ -954,7 +954,7 @@ static void DJI_Pro_Mission_Hotpoint_Pause_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Hotpoint_Pause(unsigned char pause_action)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_PAUSE,
-						&pause_action, sizeof(pause_action), 
+                        &pause_action, sizeof(pause_action),
 						DJI_Pro_Mission_Hotpoint_Pause_CallBack, 100, 1);
     return 0;
 }
@@ -977,7 +977,7 @@ static void DJI_Pro_Mission_Hotpoint_Set_Speed_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Hotpoint_Set_Speed(cmd_mission_hotpoint_velocity_t *p_hp_velocity)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_SET_SPEED,
-						(unsigned char*)p_hp_velocity, sizeof(cmd_mission_hotpoint_velocity_t), 
+                        (unsigned char*)p_hp_velocity, sizeof(cmd_mission_hotpoint_velocity_t),
 						DJI_Pro_Mission_Hotpoint_Set_Speed_CallBack, 100, 1);
     return 0;
 }
@@ -1001,7 +1001,7 @@ static void DJI_Pro_Mission_Hotpoint_Set_Radius_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Hotpoint_Set_Radius(fp32 radius)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_SET_RADIU,
-						(unsigned char*)&radius, sizeof(radius), 
+                        (unsigned char*)&radius, sizeof(radius),
 						DJI_Pro_Mission_Hotpoint_Set_Radius_CallBack, 100, 1);
     return 0;
 }
@@ -1026,7 +1026,7 @@ int DJI_Pro_Mission_Hotpoint_Reset_Yaw()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_RESET_YAW,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Hotpoint_Reset_Yaw_CallBack, 100, 1);
     return 0;
 }
@@ -1038,7 +1038,7 @@ static void DJI_Pro_Mission_Hotpoint_Download_CallBack(ProHeader *header) {
 	cmd_mission_hp_download_ack_t hp_download_ack;
    if (header->length - EXC_DATA_SIZE<= sizeof(cmd_mission_hp_download_ack_t)) {
 	    memcpy((unsigned char*)&hp_download_ack, (unsigned char*) &header -> magic, (header -> length -EXC_DATA_SIZE));
-	    printf("ACK of hp download: %x\n", hp_download_ack.ack); 
+        printf("ACK of hp download: %x\n", hp_download_ack.ack);
    }
 	else
     {
@@ -1051,7 +1051,7 @@ int DJI_Pro_Mission_Hotpoint_Download()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_HP_DOWNLOAD,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Hotpoint_Download_CallBack, 100, 1);
     return 0;
 }
@@ -1075,11 +1075,11 @@ static void DJI_Pro_Mission_Followme_Start_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Followme_Start(cmd_mission_follow_setting_t *p_follow_data)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_FM_START,
-						(unsigned char*)p_follow_data, sizeof(cmd_mission_follow_setting_t), 
+                        (unsigned char*)p_follow_data, sizeof(cmd_mission_follow_setting_t),
 						DJI_Pro_Mission_Followme_Start_CallBack, 100, 1);
     return 0;
 }
-/* 
+/*
  * interface: stop follow me interface
  */
 
@@ -1100,7 +1100,7 @@ int DJI_Pro_Mission_Followme_Stop()
 {
 	unsigned char temp = 1;
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_FM_STOP,
-						&temp, sizeof(temp), 
+                        &temp, sizeof(temp),
 						DJI_Pro_Mission_Followme_Stop_CallBack, 100, 1);
     return 0;
 }
@@ -1124,7 +1124,7 @@ static void DJI_Pro_Mission_Followme_Pause_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Followme_Pause(unsigned char pause)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_FM_PAUSE,
-						&pause, sizeof(pause), 
+                        &pause, sizeof(pause),
 						DJI_Pro_Mission_Followme_Pause_CallBack, 100, 1);
     return 0;
 }
@@ -1154,7 +1154,7 @@ static void DJI_Pro_Mission_Followme_Update_Target_CallBack(ProHeader *header) {
 int DJI_Pro_Mission_Followme_Update_Target(cmd_mission_follow_target_t *target_update)
 {
 	DJI_Pro_App_Send_Data(2,1,MY_MISSION_CMD_SET, API_MISSION_FM_TARGET,
-						(unsigned char*)target_update, sizeof(cmd_mission_follow_target_t), 
+                        (unsigned char*)target_update, sizeof(cmd_mission_follow_target_t),
 						DJI_Pro_Mission_Followme_Update_Target_CallBack, 100, 1);
     return 0;
 }
@@ -1205,11 +1205,11 @@ static unsigned short std_msg_flag = 0;
  */
 
 int DJI_Pro_Get_Broadcast_Data(sdk_std_msg_t *p_user_buf, unsigned short *msg_flags) {
-	pthread_mutex_lock(&std_msg_lock); 	
-	*p_user_buf = std_broadcast_data; 	
+    pthread_mutex_lock(&std_msg_lock);
+    *p_user_buf = std_broadcast_data;
 	*msg_flags = std_msg_flag;
-	pthread_mutex_unlock(&std_msg_lock); 	
-	return 0; 	
+    pthread_mutex_unlock(&std_msg_lock);
+    return 0;
 }
 
 int DJI_Pro_Get_Mission_State_Data(cmd_mission_common_data_t *p_user_buf)
@@ -1227,7 +1227,7 @@ int DJI_Pro_Get_Mission_Event_Data(cmd_mission_common_data_t *p_user_buf)
 	pthread_mutex_unlock(&mission_event_lock);
 	return 0;
 }
-	
+
 
 static User_Broadcast_Handler_Func p_user_broadcast_handler_func = 0;
 static Mission_State_Handler_Func p_mission_state_handler_func = 0;
@@ -1297,7 +1297,7 @@ static void DJI_Pro_App_Recv_Req_Data(ProHeader *header)
 			if (p_mission_state_handler_func)
 				p_mission_state_handler_func();
 		}
-	
+
 		else if (DJI_Pro_Get_CmdSet_Id(header) == MY_BROADCAST_CMD_SET
 				&& DJI_Pro_Get_CmdCode_Id(header) == API_WAYPOINT_DATA)
 		{

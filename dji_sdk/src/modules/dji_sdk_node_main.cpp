@@ -155,7 +155,7 @@ void DJISDKNode::broadcast_callback()
     }
 
 
-    //update flight_status 
+    //update flight_status
     if ((msg_flags & ENABLE_MSG_STATUS)) {
         std_msgs::UInt8 msg;
         flight_status = recv_sdk_std_msgs.status;
@@ -197,7 +197,7 @@ int DJI_Setup(std::string serial_port, int baudrate) {
     printf("Serial port: %s\n", uart_name);
     printf("Baudrate: %d\n", baudrate);
     printf("=========================\n");
-    
+
     //Serial Port Init
     ret = Pro_Hw_Setup(uart_name, baudrate);
     if(ret < 0)
@@ -275,7 +275,7 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
         printf("Serial Port Cannot Open\n");
         return -1;
     }
-    
+
     DJI_Pro_Activate_API(&user_act_data, NULL);
     DJI_Pro_Register_Broadcast_Callback(std::bind(&DJISDKNode::broadcast_callback, this));
 
@@ -290,7 +290,7 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
     init_services(nh);
     init_actions(nh);
 
-	int groundstation_enable; 
+    int groundstation_enable;
     nh_private.param("groundstation_enable", groundstation_enable, 1);
 	if(groundstation_enable)
 	{

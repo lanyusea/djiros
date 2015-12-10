@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  actionlib_msgs 
+  actionlib_msgs
   actionlib
 )
 
@@ -124,7 +124,7 @@ add_action_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  geometry_msgs 
+  geometry_msgs
   nav_msgs
   std_msgs
   actionlib_msgs
@@ -142,7 +142,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES dji_sdk
-  CATKIN_DEPENDS message_runtime actionlib actionlib_msgs geometry_msgs nav_msgs std_msgs 
+  CATKIN_DEPENDS message_runtime actionlib actionlib_msgs geometry_msgs nav_msgs std_msgs
 #  DEPENDS system_lib
 )
 
@@ -165,15 +165,15 @@ include_directories(
 
 ## Declare a cpp executable
 add_executable(dji_sdk_node
-  src/dji_sdk_node.cpp 
-  src/modules/dji_sdk_node_actions.cpp 
-  src/modules/dji_sdk_node_services.cpp 
-  src/modules/dji_sdk_node_main.cpp 
+  src/dji_sdk_node.cpp
+  src/modules/dji_sdk_node_actions.cpp
+  src/modules/dji_sdk_node_services.cpp
+  src/modules/dji_sdk_node_main.cpp
   src/modules/dji_sdk_node_mission.cpp
-  include/dji_sdk/DJI_LIB/DJI_Pro_App.cpp 
-  include/dji_sdk/DJI_LIB/DJI_Pro_Codec.cpp 
-  include/dji_sdk/DJI_LIB/DJI_Pro_Hw.cpp 
-  include/dji_sdk/DJI_LIB/DJI_Pro_Link.cpp 
+  include/dji_sdk/DJI_LIB/DJI_Pro_App.cpp
+  include/dji_sdk/DJI_LIB/DJI_Pro_Codec.cpp
+  include/dji_sdk/DJI_LIB/DJI_Pro_Hw.cpp
+  include/dji_sdk/DJI_LIB/DJI_Pro_Link.cpp
   include/dji_sdk/DJI_LIB/DJI_Pro_Rmu.cpp)
 
 ## Add cmake target dependencies of the executable/library
