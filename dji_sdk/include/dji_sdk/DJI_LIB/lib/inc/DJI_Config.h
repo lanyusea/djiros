@@ -30,14 +30,18 @@
 //! @todo not available yet, only affect WayPoint
 //#define STATIC_MEMORY
 
+//#define API_MISSION_DATA
 //#define API_DEBUG_DATA
 #define API_ERROR_DATA
 #define API_STATUS_DATA
 
 #define SDK_VERSION_2_3
-//#define SDK_VERSION_3_1
-//#define SDK_VERSION_3_0_A3
+//#define SDK_VERSION_3_1_M100
 //#define SDK_VERSION_3_1_A3
+
+//! @note if you do not want to use AES encript, comment this micro below
+//#define USE_ENCRIPT
+
 #include "DJI_Version.h"
 
 #endif // DJI_CONFIG_H

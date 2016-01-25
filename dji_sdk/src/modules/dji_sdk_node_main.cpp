@@ -155,14 +155,14 @@ void DJISDKNode::broadcast_callback()
 
     //update battery msg
     if (msg_flags & HAS_BATTERY) {
-        power_status.percentage = bc_data.capacity;
+        power_status.percentage = bc_data.battery;
         power_status_publisher.publish(power_status);
     }
 
     //update flight control info
     if (msg_flags & HAS_DEVICE) {
-        flight_control_info.cur_ctrl_dev_in_navi_mode = bc_data.ctrl_info.cur_ctrl_dev_in_navi_mode;
-        flight_control_info.serial_req_status = bc_data.ctrl_info.serial_req_status;
+        flight_control_info.cur_ctrl_dev_in_navi_mode = bc_data.ctrlInfo.device;
+        flight_control_info.serial_req_status = bc_data.ctrlInfo.signature;
         flight_control_info_publisher.publish(flight_control_info);
     }
 
@@ -188,7 +188,6 @@ int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     std::string serial_name;
     int baud_rate;
     int app_id;
-    int app_api_level;
     int app_version;
     std::string app_bundle_id;
     std::string enc_key;
@@ -196,25 +195,22 @@ int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     nh_private.param("serial_name", serial_name, std::string("/dev/cu.usbserial-A603T4HK"));
     nh_private.param("baud_rate", baud_rate, 230400);
     nh_private.param("app_id", app_id, 1022384);
-    nh_private.param("app_api_level", app_api_level, 2);
     nh_private.param("app_version", app_version, 1);
     nh_private.param("app_bundle_id", app_bundle_id, std::string("12345678901234567890123456789012"));
     nh_private.param("enc_key", enc_key,
             std::string("e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"));
 
     // activation
-    user_act_data.app_id = app_id;
-    user_act_data.app_api_level = app_api_level;
-    user_act_data.app_ver = DJI::onboardSDK::SDK_VERSION;
-    strcpy((char*) user_act_data.app_bundle_id, app_bundle_id.c_str());
-    user_act_data.app_key = app_key;
-    strcpy(user_act_data.app_key, enc_key.c_str());
+    user_act_data.ID = app_id;
+    user_act_data.version = DJI::onboardSDK::SDK_VERSION;
+    strcpy((char*) user_act_data.iosID, app_bundle_id.c_str());
+    user_act_data.encKey = app_key;
+    strcpy(user_act_data.encKey, enc_key.c_str());
 
     printf("=================================================\n");
-    printf("app id: %d\n", user_act_data.app_id);
-    printf("api level: %d\n", user_act_data.app_api_level);
-    printf("app version: 0x0%X\n", user_act_data.app_ver);
-    printf("app key: %s\n", user_act_data.app_key);
+    printf("app id: %d\n", user_act_data.ID);
+    printf("app version: 0x0%X\n", user_act_data.version);
+    printf("app key: %s\n", user_act_data.encKey);
     printf("=================================================\n");
 
     rosAdapter->init(serial_name, baud_rate);
