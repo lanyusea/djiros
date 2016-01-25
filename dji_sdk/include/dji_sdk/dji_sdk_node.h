@@ -33,7 +33,6 @@ private:
     nav_msgs::Odometry odometry;
 
     bool sdk_permission_opened = false;
-    bool activated = false;
     bool localposbase_use_height = true;
 
     int global_position_ref_seted = 0;
@@ -54,7 +53,6 @@ private:
     ros::Publisher power_status_publisher;
     ros::Publisher rc_channels_publisher;
     ros::Publisher velocity_publisher;
-    ros::Publisher activation_publisher;
     ros::Publisher odometry_publisher;
     ros::Publisher sdk_permission_publisher;
 
@@ -72,7 +70,6 @@ private:
         power_status_publisher = nh.advertise<dji_sdk::PowerStatus>("dji_sdk/power_status", 10);
         rc_channels_publisher = nh.advertise<dji_sdk::RCChannels>("dji_sdk/rc_channels", 10);
         velocity_publisher = nh.advertise<dji_sdk::Velocity>("dji_sdk/velocity", 10);
-        activation_publisher = nh.advertise<std_msgs::UInt8>("dji_sdk/activation", 10);
         odometry_publisher = nh.advertise<nav_msgs::Odometry>("dji_sdk/odometry",10);
         sdk_permission_publisher = nh.advertise<std_msgs::UInt8>("dji_sdk/sdk_permission", 10);
     }
