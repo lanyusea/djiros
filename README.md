@@ -28,7 +28,6 @@ It helps users handle the following commands and actions.
 1. Install and configure your hardware correctly.
 2. Enter the following info into `dji_sdk/launch/sdk_manifold.launch`.
 	* APP ID
-	* APP Level
 	* Communication Key
 	* Uart Device Name
 	* Baudrate
@@ -40,7 +39,7 @@ It helps users handle the following commands and actions.
 * [dji_sdk](dji_sdk): the core package handling the communication with Matrice 100, which provides a header file `dji_drone.h` for future use
 * [dji_sdk_demo](dji_sdk_demo): an example package of using `dji_drone.h` to control the Matrice 100
 * [dji_sdk_web_groundstation](dji_sdk_web_groundstation): a WebSocket example using ROS-bridge-suite, where a webpage groundstatino is provided
-* [dji_sdk_manifold_read_cam](dji_sdk_manifold_read_cam): a X3 video decoding package for Manifold, CATKIN_IGNOREd by defualt
+* [dji_sdk_read_cam](dji_sdk_read_cam): a X3 video decoding package for Manifold, CATKIN_IGNOREd by defualt
 * [dji_sdk_dji2mav](dji_sdk_dji2mav): a protocol converter making M100 compatiable with all MAVLink-protocol-dependent softwares
 * [dji_sdk_doc](dji_sdk_doc): all documents
 
@@ -80,7 +79,6 @@ The below environment has been tested.
 1. 按照文档配置好 M100 
 2. 将激活信息输入至launch file：`dji_sdk/launch/sdk_manifold.launch`
 	* APP ID （在官网注册key后得到）
-	* API Level （key对应的 API 权限等级）
 	* Communication Key（在官网注册key后得到）
 	* Uart Device Name（串口设备名称）
 	* Baudrate（比特率）
@@ -91,7 +89,7 @@ The below environment has been tested.
 * [dji_sdk](dji_sdk): 核心 ROS 包，处理所有与 M100 的串口通信并提供了 `dji_drone.h`的头文件供开发者引用。
 * [dji_sdk_demo](dji_sdk_demo): 一个调用 `dji_drone.h` 控制 M100 的例子。
 * [dji_sdk_web_groundstation](dji_sdk_web_groundstation): 基于 WebSocket 的网页版地面站，依赖 ROS-bridge-suite 。
-* [dji_sdk_manifold_read_cam](dji_sdk_manifold_read_cam): Manifold专用 ROS 包，对禅思 X3 云台的视频信息进行解码输出视频流。默认通过`CATKIN_IGNORE`禁用，需要手动启用。
+* [dji_sdk_read_cam](dji_sdk_read_cam): Manifold专用 ROS 包，对禅思 X3 云台的视频信息进行解码输出视频流。默认通过`CATKIN_IGNORE`禁用，需要手动启用。
 * [dji_sdk_dji2mav](dji_sdk_dji2mav): MAVLink 协议转接器，使得 M100 可以支持任意使用 MAVLink 为协议的地面站软件。
 * [dji_sdk_doc](dji_sdk_doc): 所有的文档与图片信息。
 
