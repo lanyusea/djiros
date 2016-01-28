@@ -1,17 +1,16 @@
 <package>
-  <name>dji_sdk_vis</name>
-  <version>0.0.1</version>
-  <description>dji_sdk_vis</description>
-  <maintainer email="me@botao.hu">Botao Hu</maintainer>
+  <name>dji_sdk_visualization</name>
+  <version>0.1.0</version>
+  <description>dji_sdk_visualization</description>
+
+  <maintainer email="me@botao.hu">Botao Amber Hu</maintainer>
 
   <license>BSD</license>
 
-  <author email="me@botao.hu">Botao Hu</author>
+  <author email="me@botao.hu">Botao Amber Hu</author>
 
-  <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <!-- Dependencies needed to compile this package. -->
   <build_depend>gazebo_plugins</build_depend>
   <build_depend>hector_gazebo_plugins</build_depend>
   <build_depend>hector_sensors_gazebo</build_depend>
@@ -19,7 +18,6 @@
   <build_depend>message_to_tf</build_depend>
   <build_depend>robot_state_publisher</build_depend>
 
-  <!-- Dependencies needed after this package is compiled. -->
   <run_depend>gazebo_plugins</run_depend>
   <run_depend>hector_gazebo_plugins</run_depend>
   <run_depend>hector_sensors_gazebo</run_depend>

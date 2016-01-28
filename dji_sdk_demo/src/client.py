@@ -5,6 +5,7 @@ import dji_sdk.msg
 import time
 import sys
 import math
+import rospy
 
 def display_main_menu():
     print "----------- < Main menu > ----------"
@@ -30,6 +31,7 @@ def display_main_menu():
     print "input: "
 
 def main():
+    rospy.init_node('dji_sdk_client')
     drone = DJIDrone()
     display_main_menu()
     while True:
