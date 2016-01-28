@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+  <name>dji_sdk_read_cam</name>
+  <version>0.0.0</version>
+  <description>The nv_cam package</description>
+
+  <maintainer email="norman.li@dji.com">Phoenix</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://dev.dji.com/</url>
+
+  <author email="norman.li@dji.com">Phoenix</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>opencv2</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>opencv2</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+
+  </export>
+</package>

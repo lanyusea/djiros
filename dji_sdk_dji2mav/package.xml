@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package>
+  <name>dji_sdk_dji2mav</name>
+  <version>0.0.1</version>
+  <description>The dji_sdk_dji2mav package</description>
+
+  <maintainer email="norman.li@dji.com">Phoenix</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://dev.dji.com/</url>
+
+  <author email="norman.li@dji.com">Phoenix</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>dji_sdk</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>mavlink</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <run_depend>dji_sdk</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>mavlink</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+
+  </export>
+</package>

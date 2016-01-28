@@ -12,6 +12,8 @@
 #define C_EARTH (double) 6378137.0
 #define C_PI (double) 3.141592653589793
 
+extern DJI::onboardSDK::ROSAdapter *rosAdapter;
+
 class DJISDKNode
 {
 private:
@@ -32,15 +34,14 @@ private:
     nav_msgs::Odometry odometry;
 
     bool sdk_permission_opened = false;
-    bool activated = false;
     bool localposbase_use_height = true;
 
     int global_position_ref_seted = 0;
 
 //internal variables
     char app_key[65];
-    activate_data_t user_act_data;
     unsigned char transparent_transmission_data[100];
+    ActivateData user_act_data;
 
 //Publishers:
     ros::Publisher acceleration_publisher;
@@ -54,7 +55,6 @@ private:
     ros::Publisher power_status_publisher;
     ros::Publisher rc_channels_publisher;
     ros::Publisher velocity_publisher;
-    ros::Publisher activation_publisher;
     ros::Publisher odometry_publisher;
     ros::Publisher sdk_permission_publisher;
     ros::Publisher data_received_from_remote_device_publisher;
@@ -73,7 +73,6 @@ private:
         power_status_publisher = nh.advertise<dji_sdk::PowerStatus>("power_status", 10);
         rc_channels_publisher = nh.advertise<dji_sdk::RCChannels>("rc_channels", 10);
         velocity_publisher = nh.advertise<dji_sdk::Velocity>("velocity", 10);
-        activation_publisher = nh.advertise<std_msgs::UInt8>("activation", 10);
         odometry_publisher = nh.advertise<nav_msgs::Odometry>("odometry",10);
         sdk_permission_publisher = nh.advertise<std_msgs::UInt8>("sdk_permission", 10);
         data_received_from_remote_device_publisher = nh.advertise<dji_sdk::TransparentTransmissionData>("data_received_from_remote_device", 10);
