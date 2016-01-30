@@ -199,8 +199,8 @@ bool DJISDKNode::send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDe
 {
     memcpy(transparent_transmission_data, &request.data[0], request.data.size());
 
-    DJI_Pro_Send_To_Mobile_Device(transparent_transmission_data, request.data.size(), NULL);
-    
+    //sendToMobile(transparent_transmission_data, request.data.size(), 0, 0);
+
     response.result = true;
 
     return true;

@@ -1,7 +1,6 @@
 #ifndef _DJI_LIB_ROS_ADAPTER_H_
 #define _DJI_LIB_ROS_ADAPTER_H_
 
-
 #include "DJI_HardDriver_Manifold.h"
 #include "lib/inc/DJI_API.h"
 #include "lib/inc/DJI_Flight.h"
@@ -50,11 +49,6 @@ class ROSAdapter {
         }
 
 
-        static void broadcastCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-            ( (ROSAdapter*)userData )->m_broadcastCallback();
-        }
-
-
         void init(std::string device, unsigned int baudrate) {
             printf("--- Connection Info ---\n");
             printf("Serial port: %s\n", device.c_str());
@@ -86,12 +80,22 @@ class ROSAdapter {
         }
 
 
-/*
         void activate(ActivateData *data, CallBack callback) {
             coreAPI->activate(data, callback);
         }
-*/
 
+
+        static void broadcastCallback(CoreAPI *coreAPI, Header *header, void *userData) {
+            ( (ROSAdapter*)userData )->m_broadcastCallback();
+        }
+
+        static void fromMobileCallback(CoreAPI *coreAPI, Header *header, void *userData) {
+            ( (ROSAdapter*)userData )->m_fromMobileCallback();
+        }
+
+        BroadcastData getBroadcastData() {
+            return coreAPI->getBroadcastData();
+        }
 
         template<class T>
         void setBroadcastCallback( void (T::*func)(), T *obj ) {
@@ -99,18 +103,15 @@ class ROSAdapter {
             coreAPI->setBroadcastCallback(&ROSAdapter::broadcastCallback, (UserData)this);
         }
 
-
-/*
-        BroadcastData getBroadcastData() {
-            return coreAPI->getBroadcastData();
+        template<class T>
+        void setFromMobileCallback( void (T::*func)(unsigned char *, unsigned char ), T *obj ) {
+            //m_fromMobileCallback = std::bind(func, obj);
+            //coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
         }
-*/
-
 
         void usbHandshake(std::string &device) {
             m_hd->usbHandshake(device);
         }
-
 
         //pointer to the lib API
         CoreAPI *coreAPI;
@@ -128,7 +129,7 @@ class ROSAdapter {
         pthread_t m_recvTid;
 
         std::function<void()> m_broadcastCallback;
-
+        std::function<void()> m_fromMobileCallback;
 
 };
 

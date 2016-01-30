@@ -15,6 +15,10 @@
 #include <sys/time.h>
 #include "lib/inc/DJI_Type.h"
 #include "lib/inc/DJI_HardDriver.h"
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 namespace DJI {
 
@@ -70,9 +74,19 @@ class HardDriver_Manifold : public HardDriver {
 
 
         time_ms getTimeStamp() {
-            struct timespec time;
-            clock_gettime(CLOCK_REALTIME, &time);
-            return (uint64_t)time.tv_sec * 1000 + (uint64_t)(time.tv_nsec / 1.0e6);
+            struct timespec ts;
+        #ifdef __MACH__
+            clock_serv_t cclock;
+            mach_timespec_t mts;
+            host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+            clock_get_time(cclock, &mts);
+            mach_port_deallocate(mach_task_self(), cclock);
+            ts.tv_sec = mts.tv_sec;
+            ts.tv_nsec = mts.tv_nsec;
+        #else
+            clock_gettime(CLOCK_REALTIME, &ts);
+        #endif
+            return (uint64_t)ts.tv_sec * 1000 + (uint64_t)(ts.tv_nsec / 1.0e6);
         }
 
 
@@ -154,6 +168,7 @@ class HardDriver_Manifold : public HardDriver {
                 B57600,
                 B115200,
                 B230400
+
             };
             int std_rate[] = {
                 4800,
@@ -162,10 +177,7 @@ class HardDriver_Manifold : public HardDriver {
                 38400,
                 57600,
                 115200,
-                230400,
-                1000000,
-                1152000,
-                3000000,
+                230400
             };
 
             int i,j;
@@ -287,7 +299,6 @@ class HardDriver_Manifold : public HardDriver {
                 return saved;
             }
         }
-
 
 };
 

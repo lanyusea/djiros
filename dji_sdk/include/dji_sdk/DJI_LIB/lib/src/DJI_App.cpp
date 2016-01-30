@@ -182,11 +182,6 @@ void DJI::onboardSDK::CoreAPI::recvReqData(Header *header)
         recvCallback.callback(this, header, recvCallback.userData);
 }
 
-void CoreAPI::setFromMobileCallback(CallBackHandler FromMobileEntrance)
-{
-    fromMobileCallback = FromMobileEntrance;
-}
-
 void CoreAPI::setBroadcastCallback(CallBack handler, UserData userData)
 {
     broadcastCallback.callback = handler;

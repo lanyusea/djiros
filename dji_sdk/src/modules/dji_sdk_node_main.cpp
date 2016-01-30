@@ -13,7 +13,7 @@ void DJISDKNode::transparent_transmission_callback(unsigned char *buf, unsigned 
 
 void DJISDKNode::broadcast_callback()
 {
-    DJI::onboardSDK::BroadcastData bc_data = rosAdapter->coreAPI->getBroadcastData();
+    DJI::onboardSDK::BroadcastData bc_data = rosAdapter->getBroadcastData();
     unsigned short msg_flags = bc_data.dataFlag;
 
     static int frame_id = 0;
@@ -192,8 +192,6 @@ void DJISDKNode::broadcast_callback()
 
 }
 
-
-
 int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
 {
     std::string serial_name;
@@ -224,11 +222,12 @@ int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     printf("app key: %s\n", user_act_data.encKey);
     printf("=================================================\n");
 
+    rosAdapter = new DJI::onboardSDK::ROSAdapter;
     rosAdapter->init(serial_name, baud_rate);
-
-    rosAdapter->coreAPI->activate(&user_act_data, NULL);
+    rosAdapter->activate(&user_act_data, NULL);
     rosAdapter->setBroadcastCallback(&DJISDKNode::broadcast_callback, this);
-
+    rosAdapter->setFromMobileCallback(&DJISDKNode::transparent_transmission_callback, this);
+    
     return 0;
 }
 
@@ -239,6 +238,13 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
     init_services(nh);
     init_actions(nh);
     init_parameters_and_activate(nh_private);
+}
+
+
+
+DJISDKNode::~DJISDKNode()
+{
+    delete rosAdapter;
 }
 
 

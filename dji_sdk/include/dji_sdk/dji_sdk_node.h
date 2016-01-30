@@ -12,11 +12,11 @@
 #define C_EARTH (double) 6378137.0
 #define C_PI (double) 3.141592653589793
 
-extern DJI::onboardSDK::ROSAdapter *rosAdapter;
-
 class DJISDKNode
 {
 private:
+//DJI SDK Adapter
+    DJI::onboardSDK::ROSAdapter* rosAdapter;
 //Drone state variables:
     dji_sdk::Acceleration acceleration;
     dji_sdk::AttitudeQuaternion attitude_quaternion;
@@ -168,6 +168,7 @@ private:
 
 public:
     DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
+    ~DJISDKNode();
 
 private:
     int init_parameters_and_activate(ros::NodeHandle& nh_private);
