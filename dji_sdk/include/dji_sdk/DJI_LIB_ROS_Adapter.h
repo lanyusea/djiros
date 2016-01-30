@@ -1,14 +1,15 @@
 #ifndef _DJI_LIB_ROS_ADAPTER_H_
 #define _DJI_LIB_ROS_ADAPTER_H_
 
-#include "DJI_HardDriver_Manifold.h"
-#include "lib/inc/DJI_API.h"
-#include "lib/inc/DJI_Flight.h"
-#include "lib/inc/DJI_Camera.h"
-#include "lib/inc/DJI_VirtualRC.h"
-#include "lib/inc/DJI_WayPoint.h"
-#include "lib/inc/DJI_HotPoint.h"
-#include "lib/inc/DJI_Follow.h"
+#include "DJI_HardDriver_Unix.h"
+#include <dji_sdk_lib/DJI_API.h>
+#include <dji_sdk_lib/DJI_App.h>
+#include <dji_sdk_lib/DJI_Flight.h>
+#include <dji_sdk_lib/DJI_Camera.h>
+#include <dji_sdk_lib/DJI_VirtualRC.h>
+#include <dji_sdk_lib/DJI_WayPoint.h>
+#include <dji_sdk_lib/DJI_HotPoint.h>
+#include <dji_sdk_lib/DJI_Follow.h>
 
 #include <ros/ros.h>
 #include <stdlib.h>
@@ -55,7 +56,7 @@ class ROSAdapter {
             printf("Baudrate: %u\n", baudrate);
             printf("-----\n");
 
-            m_hd = new HardDriver_Manifold(device, baudrate);
+            m_hd = new HardDriver_Unix(device, baudrate);
             m_hd->init();
 
             coreAPI = new CoreAPI( (HardDriver*)m_hd );
@@ -90,7 +91,9 @@ class ROSAdapter {
         }
 
         static void fromMobileCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-            ( (ROSAdapter*)userData )->m_fromMobileCallback();
+            uint8_t *data = ((unsigned char *) header) + sizeof(Header);
+            uint8_t len = header->length;
+            ( (ROSAdapter*)userData )->m_fromMobileCallback(data, len);
         }
 
         BroadcastData getBroadcastData() {
@@ -104,9 +107,13 @@ class ROSAdapter {
         }
 
         template<class T>
-        void setFromMobileCallback( void (T::*func)(unsigned char *, unsigned char ), T *obj ) {
-            //m_fromMobileCallback = std::bind(func, obj);
-            //coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
+        void setFromMobileCallback( void (T::*func)(uint8_t *, uint8_t), T *obj ) {
+            m_fromMobileCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+            coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
+        }
+
+        void sendToMobile(uint8_t *data, uint8_t len) {
+            coreAPI->sendToMobile(data, len, NULL, NULL);
         }
 
         void usbHandshake(std::string &device) {
@@ -124,12 +131,12 @@ class ROSAdapter {
 
 
     private:
-        HardDriver_Manifold *m_hd;
+        HardDriver_Unix *m_hd;
 
         pthread_t m_recvTid;
 
         std::function<void()> m_broadcastCallback;
-        std::function<void()> m_fromMobileCallback;
+        std::function<void(uint8_t *, uint8_t)> m_fromMobileCallback;
 
 };
 

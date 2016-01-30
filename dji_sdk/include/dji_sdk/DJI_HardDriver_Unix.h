@@ -13,8 +13,8 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <sys/time.h>
-#include "lib/inc/DJI_Type.h"
-#include "lib/inc/DJI_HardDriver.h"
+#include <dji_sdk_lib/DJI_Type.h>
+#include <dji_sdk_lib/DJI_HardDriver.h>
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
@@ -24,10 +24,10 @@ namespace DJI {
 
 namespace onboardSDK {
 
-class HardDriver_Manifold : public HardDriver {
+class HardDriver_Unix : public HardDriver {
 
     public:
-        HardDriver_Manifold(std::string device, unsigned int baudrate) {
+        HardDriver_Unix(std::string device, unsigned int baudrate) {
             m_device = device;
             m_baudrate = baudrate;
             m_memLock = PTHREAD_MUTEX_INITIALIZER;
@@ -35,7 +35,7 @@ class HardDriver_Manifold : public HardDriver {
         }
 
 
-        ~HardDriver_Manifold() {
+        ~HardDriver_Unix() {
             _serialClose();
         }
 

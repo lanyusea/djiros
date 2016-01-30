@@ -1,14 +1,19 @@
 #include <dji_sdk/dji_sdk_node.h>
 #include <functional>
+#include <cstdio>
 
 #define DEG2RAD(DEG) ((DEG)*((C_PI)/(180.0)))
 
-void DJISDKNode::transparent_transmission_callback(unsigned char *buf, unsigned char len)
+void DJISDKNode::transparent_transmission_callback(uint8_t *buf, uint8_t len)
 {
     dji_sdk::TransparentTransmissionData transparent_transmission_data;
     transparent_transmission_data.data.resize(len);
     memcpy(&transparent_transmission_data.data[0], buf, len);
     data_received_from_remote_device_publisher.publish(transparent_transmission_data);
+
+    for (int i = 0; i < len; i++)
+	    std::putchar(transparent_transmission_data.data[i]);
+	std::putchar('\n');
 }
 
 void DJISDKNode::broadcast_callback()

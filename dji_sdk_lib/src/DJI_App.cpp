@@ -187,3 +187,9 @@ void CoreAPI::setBroadcastCallback(CallBack handler, UserData userData)
     broadcastCallback.callback = handler;
     broadcastCallback.userData = userData;
 }
+
+void CoreAPI::setFromMobileCallback(CallBack handler, UserData userData)
+{
+    fromMobileCallback.callback = handler;
+    fromMobileCallback.userData = userData;
+}

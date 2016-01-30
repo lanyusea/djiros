@@ -111,7 +111,7 @@ bool DJISDKNode::global_position_control_callback(dji_sdk::GlobalPositionControl
     gps_convert_ned(dst_x, 
             dst_y,
             request.longitude, request.latitude,
-            global_position.longitude,  global_position.latitude);
+            global_position.longitude, global_position.latitude);
 
     DJI::onboardSDK::FlightData flight_ctrl_data;
     flight_ctrl_data.flag = 0x90;
@@ -199,8 +199,8 @@ bool DJISDKNode::send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDe
 {
     memcpy(transparent_transmission_data, &request.data[0], request.data.size());
 
-    //sendToMobile(transparent_transmission_data, request.data.size(), 0, 0);
-
+    //TODO: have a custom callback?
+    rosAdapter->sendToMobile(transparent_transmission_data, request.data.size());
     response.result = true;
 
     return true;

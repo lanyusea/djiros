@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs 
   actionlib
   tf
+  dji_sdk_lib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -113,7 +114,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES dji_sdk
-  CATKIN_DEPENDS message_runtime actionlib actionlib_msgs geometry_msgs nav_msgs std_msgs tf
+  CATKIN_DEPENDS message_runtime actionlib actionlib_msgs geometry_msgs nav_msgs std_msgs tf dji_sdk_lib
 #  DEPENDS system_lib
 )
 
@@ -124,16 +125,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(
-	include/dji_sdk/DJI_LIB/lib/inc
-	include
-  ${catkin_INCLUDE_DIRS}
-)
 
-## Declare a cpp library
-# add_library(dji_sdk
-#   src/${PROJECT_NAME}/dji_sdk.cpp
-# )
+include_directories(
+	include
+    ${catkin_INCLUDE_DIRS}
+)
 
 ## Declare a cpp executable
 add_executable(dji_sdk_node
@@ -141,19 +137,7 @@ add_executable(dji_sdk_node
   src/modules/dji_sdk_node_actions.cpp 
   src/modules/dji_sdk_node_services.cpp 
   src/modules/dji_sdk_node_main.cpp 
-  include/dji_sdk/DJI_LIB/lib/src/DJI_API.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_App.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Camera.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Codec.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Flight.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Follow.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_HardDriver.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_HotPoint.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Link.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Memory.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_Mission.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_VirtualRC.cpp
-  include/dji_sdk/DJI_LIB/lib/src/DJI_WayPoint.cpp)
+)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
