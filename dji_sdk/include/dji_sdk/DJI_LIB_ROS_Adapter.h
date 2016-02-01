@@ -90,13 +90,9 @@ class ROSAdapter {
         }
 
         static void fromMobileCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-            uint8_t *data = ((unsigned char *) header) + sizeof(Header);
-            uint8_t len = header->length - sizeof(Header);
+            uint8_t *data = ((unsigned char *) header) + sizeof(Header) + SET_CMD_SIZE;
+            uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
             ( (ROSAdapter*)userData )->m_fromMobileCallback(data, len);
-
-            //TODO: delete
-            printf("sof: %d; length: %d; version: %d; sessionID: %d; isAck: %d; padding: %d; enc: %d; sequenceNumber: %d; crc: %d; len: %d; sizeof(Header): %d\n", 
-                header->sof, header->length, header->version, header->sessionID, header->isAck, header->padding, header->enc, header->sequenceNumber, header->crc, len, sizeof(Header));                 
         }
 
         BroadcastData getBroadcastData() {

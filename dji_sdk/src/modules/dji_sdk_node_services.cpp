@@ -198,8 +198,6 @@ bool DJISDKNode::velocity_control_callback(dji_sdk::VelocityControl::Request& re
 bool DJISDKNode::send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDevice::Request& request, dji_sdk::SendDataToRemoteDevice::Response& response)
 {
     memcpy(transparent_transmission_data, &request.data[0], request.data.size());
-
-    //TODO: have a custom callback?
     rosAdapter->sendToMobile(transparent_transmission_data, request.data.size());
     response.result = true;
 

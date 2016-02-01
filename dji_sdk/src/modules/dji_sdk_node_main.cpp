@@ -10,12 +10,6 @@ void DJISDKNode::transparent_transmission_callback(uint8_t *buf, uint8_t len)
     transparent_transmission_data.data.resize(len);
     memcpy(&transparent_transmission_data.data[0], buf, len);
     data_received_from_remote_device_publisher.publish(transparent_transmission_data);
-
-//TODO: delete
-    printf("%d\n", len);
-    for (int i = 0; i < len; i++)
-	    std::putchar(transparent_transmission_data.data[i]);
-	std::putchar('\n');
 }
 
 void DJISDKNode::broadcast_callback()
