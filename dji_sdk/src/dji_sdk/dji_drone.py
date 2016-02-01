@@ -85,7 +85,7 @@ class DJIDrone:
         self.activation_subscriber = rospy.Subscriber("activation", std_msgs.msg.UInt8, self.activation_subscriber_callback)
         self.odometry_subscriber = rospy.Subscriber("odometry", nav_msgs.msg.Odometry, self.odometry_subscriber_callback)
         self.sdk_permission_subscriber = rospy.Subscriber("sdk_permission", std_msgs.msg.UInt8, self.sdk_permission_subscriber_callback)
-        self.data_received_from_remote_device_subscriber = rospy.Subscriber("data_received_from_remote_device", dji_sdl.msg.TransparentTransmissionData, self.data_received_from_remote_device_callback)
+        self.data_received_from_remote_device_subscriber = rospy.Subscriber("data_received_from_remote_device", dji_sdk.msg.TransparentTransmissionData, self.data_received_from_remote_device_callback)
 
     def init_services(self):
         rospy.wait_for_service("attitude_control")
