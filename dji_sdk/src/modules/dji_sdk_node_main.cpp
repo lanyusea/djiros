@@ -183,14 +183,17 @@ void DJISDKNode::broadcast_callback()
         flight_control_info_publisher.publish(flight_control_info);
     }
 
-    //update obtaincontrol msg
-    if (msg_flags & HAS_TIME) {
-        std_msgs::UInt8 msg;
-        sdk_permission_opened = bc_data.controlStatus;
-        msg.data = bc_data.controlStatus;
-        sdk_permission_publisher.publish(msg);
-    }
+    std_msgs::UInt8 msg;
 
+    //update obtaincontrol msg
+    sdk_permission_opened = bc_data.controlStatus;
+    msg.data = bc_data.controlStatus;
+    sdk_permission_publisher.publish(msg);
+
+    //update activation msg
+    activated = bc_data.activation;
+    msg.data = bc_data.activation;
+    activation_publisher.publish(msg);
 }
 
 int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)

@@ -1,2 +1,3 @@
 *.pyc
-CMakeLists.txt
+/CMakeLists.txt
+**.idea

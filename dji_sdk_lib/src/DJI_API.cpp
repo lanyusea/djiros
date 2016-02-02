@@ -366,9 +366,16 @@ void CoreAPI::setControlCallback(CoreAPI *This, Header *header, UserData userDat
                                               "satisfied");
             break;
         case ACK_SETCONTROL_RELEASE_SUCCESS:
+            This->getDriver()->lockMSG();
+            This->broadcastData.controlStatus = 0;
+            This->getDriver()->freeMSG();
             API_LOG(This->driver, STATUS_LOG, "release control successfully\n");
             break;
         case ACK_SETCONTROL_OBTAIN_SUCCESS:
+            This->getDriver()->lockMSG();
+            This->broadcastData.controlStatus = 1;
+            This->getDriver()->freeMSG();
+
             API_LOG(This->driver, STATUS_LOG, "obtain control successfully\n");
             break;
         case ACK_SETCONTROL_OBTAIN_RUNNING:
