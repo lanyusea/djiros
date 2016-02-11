@@ -1,3 +1,6 @@
+#ifndef DJI_DRONE_H
+#define DJI_DRONE_H
+
 #include <dji_sdk/dji_sdk.h>
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
@@ -498,3 +501,4 @@ public:
 	
 };
 
+#endif

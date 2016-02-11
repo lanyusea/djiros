@@ -1,5 +1,5 @@
-#ifndef _DJI_LIB_ROS_ADAPTER_H_
-#define _DJI_LIB_ROS_ADAPTER_H_
+#ifndef DJI_LIB_ROS_ADAPTER_H
+#define DJI_LIB_ROS_ADAPTER_H
 
 #include "DJI_HardDriver_Unix.h"
 #include <dji_sdk_lib/DJI_API.h>

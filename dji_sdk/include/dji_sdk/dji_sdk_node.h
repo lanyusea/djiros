@@ -1,5 +1,5 @@
-#ifndef __DJI_SDK_NODE_H__
-#define __DJI_SDK_NODE_H__
+#ifndef DJI_SDK_NODE_H
+#define DJI_SDK_NODE_H
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>

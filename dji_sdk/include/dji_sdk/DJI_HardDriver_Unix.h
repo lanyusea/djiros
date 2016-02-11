@@ -1,5 +1,5 @@
-#ifndef __DJI_HARDDRIVER_MANIFOLD_H__
-#define __DJI_HARDDRIVER_MANIFOLD_H__
+#ifndef DJI_HARDDRIVER_MANIFOLD_H
+#define DJI_HARDDRIVER_MANIFOLD_H
 
 
 #include <stdio.h>

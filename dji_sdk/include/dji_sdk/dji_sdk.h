@@ -1,5 +1,5 @@
-#ifndef SDK_LIBRARY_H
-#define SDK_LIBRARY_H
+#ifndef DJI_SDK_H
+#define DJI_SDK_H
 
 //SDK library
 #include "DJI_LIB_ROS_Adapter.h" 
