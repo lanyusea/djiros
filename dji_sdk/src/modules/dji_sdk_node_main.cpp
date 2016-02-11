@@ -4,7 +4,7 @@
 
 #define DEG2RAD(DEG) ((DEG)*((C_PI)/(180.0)))
 
-void DJISDKNode::transparent_transmission_callback(uint8_t *buf, uint8_t len)
+void DJISDKNode::transparent_transmission_callback(uint8_t *buf, size_t len)
 {
     dji_sdk::TransparentTransmissionData transparent_transmission_data;
     transparent_transmission_data.data.resize(len);
@@ -196,7 +196,7 @@ void DJISDKNode::broadcast_callback()
     activation_publisher.publish(msg);
 }
 
-int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
+void DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
 {
     std::string serial_name;
     int baud_rate;
@@ -231,8 +231,6 @@ int DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     rosAdapter->activate(&user_act_data, NULL);
     rosAdapter->setBroadcastCallback(&DJISDKNode::broadcast_callback, this);
     rosAdapter->setFromMobileCallback(&DJISDKNode::transparent_transmission_callback, this);
-    
-    return 0;
 }
 
 

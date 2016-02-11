@@ -11,6 +11,7 @@
 
 #define C_EARTH (double) 6378137.0
 #define C_PI (double) 3.141592653589793
+#define TRANSPARNT_TRANSMISSION_MAXSIZE 100
 
 class DJISDKNode
 {
@@ -41,7 +42,7 @@ private:
 
 //internal variables
     char app_key[65];
-    unsigned char transparent_transmission_data[100];
+    uint8_t transparent_transmission_data[TRANSPARNT_TRANSMISSION_MAXSIZE];
     ActivateData user_act_data;
 
 //Publishers:
@@ -174,9 +175,9 @@ public:
     ~DJISDKNode();
 
 private:
-    int init_parameters_and_activate(ros::NodeHandle& nh_private);
+    void init_parameters_and_activate(ros::NodeHandle& nh_private);
     void broadcast_callback();
-    void transparent_transmission_callback(unsigned char *buf, unsigned char len);
+    void transparent_transmission_callback(uint8_t *buf, size_t len);
 
     bool process_waypoint(dji_sdk::Waypoint new_waypoint);
 

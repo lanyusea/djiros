@@ -106,12 +106,12 @@ class ROSAdapter {
         }
 
         template<class T>
-        void setFromMobileCallback( void (T::*func)(uint8_t *, uint8_t), T *obj ) {
+        void setFromMobileCallback( void (T::*func)(uint8_t *, size_t), T *obj ) {
             m_fromMobileCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
             coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
         }
 
-        void sendToMobile(uint8_t *data, uint8_t len) {
+        void sendToMobile(uint8_t *data, size_t len) {
             coreAPI->sendToMobile(data, len, NULL, NULL);
         }
 
@@ -135,7 +135,7 @@ class ROSAdapter {
         pthread_t m_recvTid;
 
         std::function<void()> m_broadcastCallback;
-        std::function<void(uint8_t *, uint8_t)> m_fromMobileCallback;
+        std::function<void(uint8_t *, size_t)> m_fromMobileCallback;
 
 };
 

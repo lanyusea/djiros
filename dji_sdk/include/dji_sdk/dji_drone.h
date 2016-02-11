@@ -29,6 +29,7 @@ private:
     ros::ServiceClient local_position_control_service;
     ros::ServiceClient sdk_permission_control_service;
     ros::ServiceClient velocity_control_service;
+    ros::ServiceClient send_data_to_remote_device_service;
 
     ros::Subscriber acceleration_subscriber;
     ros::Subscriber attitude_quaternion_subscriber;
@@ -44,6 +45,7 @@ private:
     ros::Subscriber activation_subscriber;
     ros::Subscriber odometry_subscriber;
     ros::Subscriber sdk_permission_subscriber;
+    ros::Subscriber data_received_from_remote_device_subscriber;
 
 public:
     dji_sdk::Acceleration acceleration;
@@ -63,6 +65,8 @@ public:
     bool sdk_permission_opened = false;
     bool activation = false;
     bool localposbase_use_height = true;
+   	typedef std::function<void(const std::vector<uint8_t>&)> DataHandler;
+	std::vector<DataHandler> data_received_from_remote_device_callbacks;
 
 private:
 	void acceleration_subscriber_callback(dji_sdk::Acceleration acceleration)
@@ -135,6 +139,13 @@ private:
 		this->sdk_permission_opened = sdk_permission.data;
 	}
 
+	void data_received_from_remote_device_subscriber_callback(dji_sdk::TransparentTransmissionData data)
+	{
+		for (auto& callback: this->data_received_from_remote_device_callbacks) {
+			callback(data.data);
+		}
+	}
+
 public:
 	DJIDrone(ros::NodeHandle& nh):
 		drone_task_action_client(nh, "drone_task_action", true),
@@ -151,6 +162,7 @@ public:
 	    local_position_control_service = nh.serviceClient<dji_sdk::LocalPositionControl>("local_position_control");
 	    sdk_permission_control_service = nh.serviceClient<dji_sdk::SDKPermissionControl>("sdk_permission_control");
 	    velocity_control_service = nh.serviceClient<dji_sdk::VelocityControl>("velocity_control");
+		send_data_to_remote_device_service = nh.serviceClient<dji_sdk::SendDataToRemoteDevice>("send_data_to_remote_device");
 
         acceleration_subscriber = nh.subscribe<dji_sdk::Acceleration>("acceleration", 10, &DJIDrone::acceleration_subscriber_callback, this);
         attitude_quaternion_subscriber = nh.subscribe<dji_sdk::AttitudeQuaternion>("attitude_quaternion", 10, &DJIDrone::attitude_quaternion_subscriber_callback, this);
@@ -166,6 +178,7 @@ public:
         activation_subscriber = nh.subscribe<std_msgs::UInt8>("activation", 10, &DJIDrone::activation_subscriber_callback, this);
         odometry_subscriber = nh.subscribe<nav_msgs::Odometry>("odometry",10, &DJIDrone::odometry_subscriber_callback, this);
         sdk_permission_subscriber = nh.subscribe<std_msgs::UInt8>("sdk_permission", 10, &DJIDrone::sdk_permission_subscriber_callback, this);
+        data_received_from_remote_device_subscriber = nh.subscribe<dji_sdk::TransparentTransmissionData>("data_received_from_remote_device", 10, &DJIDrone::data_received_from_remote_device_subscriber_callback, this);
 	}
 
 	bool takeoff()
@@ -252,6 +265,15 @@ public:
 		
 		return sdk_permission_control_service.call(sdk_permission_control) && sdk_permission_control.response.result;
 
+	}
+
+	bool send_data_to_remote_device(const std::vector<uint8_t>& data)
+	{
+		dji_sdk::SendDataToRemoteDevice send_data_to_remote_device;
+
+		send_data_to_remote_device.request.data = data;
+	
+		return send_data_to_remote_device_service.call(send_data_to_remote_device) && send_data_to_remote_device.response.result;
 	}
 
 	bool attitude_control(unsigned char ctrl_flag, float x, float y, float z, float yaw)
