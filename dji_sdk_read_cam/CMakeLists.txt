@@ -26,4 +26,3 @@ target_link_libraries(
   dji_sdk_read_cam
   dcam
   ${catkin_LIBRARIES})
-

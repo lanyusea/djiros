@@ -1,4 +1,4 @@
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
@@ -175,7 +175,7 @@ IplImage* YUV420_To_IplImage(unsigned char* pYUV420, int width, int height)
 
 int main(int argc, char **argv)
 {
-	ros::init(argc,argv,"image_raw");
+	ros::init(argc,argv,"dji_image_raw");
 	int ret,nKey;
 	int nState = 1;
 	int nCount = 1;
@@ -201,13 +201,12 @@ int main(int argc, char **argv)
 
 	ros::NodeHandle node;
 	image_transport::ImageTransport transport(node);
-	image_transport::Publisher image_pub = transport.advertise("dji_sdk/image_raw", 1);
-	ros::Publisher caminfo_pub = node.advertise<sensor_msgs::CameraInfo>("dji_sdk/camera_info",1);
+	image_transport::Publisher image_pub = transport.advertise("image_raw", 1);
+	ros::Publisher caminfo_pub = node.advertise<sensor_msgs::CameraInfo>("camera_info",1);
 
-	ros::Time time=ros::Time::now();
+	ros::Time time = ros::Time::now();
 
 	cv_bridge::CvImage cvi;
-
 
 	sensor_msgs::Image im;
 	sensor_msgs::CameraInfo cam_info;
@@ -246,16 +245,15 @@ int main(int argc, char **argv)
 
 		if(ret != -1)
 		{
-
 			if(gray_or_rgb){
 				NV12ToRGB(buffer,pData,1280,720);
-				memcpy(pRawImg->imageData,pData,FRAME_SIZE);
+				memcpy(pRawImg->imageData, pData, FRAME_SIZE);
 			}else{
-				memcpy(pRawImg->imageData,buffer,FRAME_SIZE/3);
+				memcpy(pRawImg->imageData, buffer, FRAME_SIZE/3);
 			}
-			cvResize(pRawImg,pImg,CV_INTER_LINEAR);
+			cvResize(pRawImg, pImg, CV_INTER_LINEAR);
 
-			time=ros::Time::now();
+			time = ros::Time::now();
 			cvi.header.stamp = time;
 			cvi.header.frame_id = "image";
 			if(gray_or_rgb){
