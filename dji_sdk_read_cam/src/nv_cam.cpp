@@ -1,4 +1,4 @@
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
@@ -263,7 +263,7 @@ int main(int argc, char **argv)
 			}else{
 				cvi.encoding = "mono8";
 			}
-			cvi.image = pImg;
+			cvi.image = cv::cvarrToMat(pImg);
 			cvi.toImageMsg(im);
 			cam_info.header.seq = nCount;
 			cam_info.header.stamp = time;
