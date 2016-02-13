@@ -2,9 +2,9 @@
 
 <launch>
     <arg name="serial_name" default="/dev/cu.usbserial-A603T4HK"/>
-    <arg name="name" default="/"/>
+    <arg name="namespace" default="/"/>
 
-    <node pkg="dji_sdk" type="dji_sdk_node" name="dji_sdk_server" output="screen" ns="$(arg name)">
+    <node pkg="dji_sdk" type="dji_sdk_node" name="dji_sdk_server" output="screen" ns="$(arg namespace)">
         <!-- node parameters -->
         <param name="serial_name" type="string" value="$(arg serial_name)"/>
         <param name="baud_rate" type="int" value="230400"/>
