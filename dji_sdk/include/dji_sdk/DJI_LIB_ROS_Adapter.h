@@ -10,6 +10,7 @@
 #include <dji_sdk_lib/DJI_WayPoint.h>
 #include <dji_sdk_lib/DJI_HotPoint.h>
 #include <dji_sdk_lib/DJI_Follow.h>
+#include <dji_sdk_lib/DJI_LED.h>
 
 #include <ros/ros.h>
 #include <stdlib.h>
@@ -32,6 +33,7 @@ class ROSAdapter {
             delete flight;
             delete camera;
             delete virtualRC;
+			delete led;
             delete waypoint;
             delete hotpoint;
             delete followme;
@@ -91,6 +93,7 @@ class ROSAdapter {
             waypoint = new WayPoint(coreAPI);
             hotpoint = new HotPoint(coreAPI);
             followme = new Follow(coreAPI);
+			led = new LED(coreAPI);
 
             int ret;
             ret = pthread_create(&m_recvTid, 0, APIRecvThread, (void *)coreAPI);
@@ -155,6 +158,7 @@ class ROSAdapter {
         WayPoint *waypoint;
         HotPoint *hotpoint;
         Follow *followme;
+		LED *led;
 
 
     private:
