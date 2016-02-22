@@ -24,6 +24,8 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+
 add_executable(dji_sdk_read_cam src/nv_cam.cpp)
 link_directories(/usr/local/lib /usr/lib/arm-linux-gnueabihf /usr/lib)
 target_link_libraries(
@@ -31,3 +33,6 @@ target_link_libraries(
   dcam
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS})
+
+endif()
+
