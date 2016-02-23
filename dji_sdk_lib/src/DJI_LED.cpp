@@ -35,22 +35,7 @@ void LED::getLEDInfoCallback(CoreAPI *This, Header *header, UserData userData __
 void LED::registerLED(RegisterLED registerLED, CallBack callback, UserData userData)
 {
 
-	LED::RegisterLED registerLed;
-
-	//if (registerLED == 0){
-		registerLed.generate_flag = 0;
-		registerLed.requester_id = 1;
-		registerLed.identity_id = 128;
-		registerLed.actions = { {1, 4, 3, 0, 0, 1, 6, 9},
-								{5, 10, 20, 50, 0, 0, 0, 2} };
-		registerLed.priority = 1;
-		registerLed.show_times = 0;
-	//}
-	//else {
-	//	registerLed = registerLED;
-	//}
-
-	api->send(2, encrypt, SET_LED, LED_REGISTER, (unsigned char*)&registerLed, 
+	api->send(2, encrypt, SET_LED, LED_REGISTER, (unsigned char*)&registerLED, 
 			sizeof(registerLED), 100, 3, 
 			callback ? callback:LED::registerLEDCallback, userData);
 }
@@ -69,20 +54,8 @@ void LED::registerLEDCallback(CoreAPI *This, Header *header, UserData userData)
 	printf("surplus_action_num: %d \n", ack.surplus_action_num);
 }
 
-void LED::logoutLED (LogoutLED logoutLed, CallBack callback, UserData userData )
+void LED::logoutLED (LogoutLED logoutLED, CallBack callback, UserData userData )
 {
-	LED::LogoutLED logoutLED;
-	//if (logoutLed == 0) {
-
-		logoutLED.action_num = 5;
-		logoutLED.requester_id = 1;
-		logoutLED.action_id = {0, 1, 2, 3, 4};
-
-	//}
-	//else {
-	//	logoutLED = logoutLed;
-	//}
-
 	api->send(2, encrypt, SET_LED, LED_LOGOUT, (unsigned char*)&logoutLED, 
 			sizeof(logoutLED), 100, 3, 
 			callback ? callback:LED::logoutLEDCallback, userData);
@@ -98,18 +71,8 @@ void LED::logoutLEDCallback (CoreAPI *This, Header * header, UserData userData)
 	printf("logout surplus_action_num%d \n", ack.surplus_action_num);
 }
 
-void LED::setLEDAction(SetLEDAction ledAction, CallBack callback, UserData userData)
+void LED::setLEDAction(SetLEDAction LEDAction, CallBack callback, UserData userData)
 {
-	LED::SetLEDAction LEDAction;
-	//if(ledActionStatus == 0) {
-		LEDAction.action_num = 1;
-		LEDAction.requester_id = 1;
-		LEDAction.action_status[0].id = 0;
-		LEDAction.action_status[0].status= 1;
-	//}
-	//else {
-	//	LEDActionStatus = ledActionStatus;
-	//}
 
 	api->send(2, encrypt, SET_LED, LED_SET_STATUS, 
 			(unsigned char*)&LEDAction, 
