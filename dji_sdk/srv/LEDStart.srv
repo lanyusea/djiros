@@ -1,0 +1,6 @@
+uint8 action_num
+uint32 requester_id
+uint8[5] action_id
+uint8[5] status
+---
+uint8 result

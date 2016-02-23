@@ -1,0 +1,13 @@
+uint8 generate_flag
+uint32 requester_id
+uint8 identity_id
+uint16[8] action_color
+uint16[8] action_time
+uint8 priority
+uint8 show_times
+---
+uint8 result
+uint32 requester_id
+uint8 identity_id
+uint8 action_id
+uint8 surplus_action_num

@@ -47,7 +47,6 @@ public:
 		uint8_t action_num;
 		uint32_t requester_id;
 		uint8_t action_id[5];
-		uint8_t result;
 	} LogoutLED;
 
 	typedef struct LogoutLEDACK
@@ -82,15 +81,15 @@ public:
 	LED(CoreAPI *ControlAPI = 0);
 	CoreAPI *getApi() const;
 
-	void getLEDInfo (CallBack callback, UserData userData = 0);
+	void getLEDInfo (CallBack callback = 0, UserData userData = 0);
 	void registerLED (RegisterLED registerLED, CallBack callback = 0, UserData userData = 0);
-	void logoutLED (LogoutLED logoutLed, CallBack callback = 0, UserData userData = 0);
-	void setLEDAction (SetLEDAction ledAction, CallBack callback = 0, UserData userData = 0);
+	void logoutLED (LogoutLED logoutLED, CallBack callback = 0, UserData userData = 0);
+	void startLED(SetLEDAction LEDAction, CallBack callback = 0, UserData userData = 0);
 	
 	static void getLEDInfoCallback(CoreAPI *This, Header *header, UserData userData = 0);
 	static void registerLEDCallback(CoreAPI *This, Header *header, UserData userData = 0);
 	static void logoutLEDCallback(CoreAPI *This, Header *header, UserData userData = 0);
-	static void setLEDActionCallback(CoreAPI *This, Header *header, UserData userData = 0);
+	static void startLEDCallback(CoreAPI *This, Header *header, UserData userData = 0);
 	
 private:
 	CoreAPI *api;

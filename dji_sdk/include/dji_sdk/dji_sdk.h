@@ -75,5 +75,11 @@
 #include <dji_sdk/MissionEventWpAction.h>
 #include <dji_sdk/MissionEventWpReach.h>
 
+//LED
+#include <dji_sdk/LEDQuery.h>
+#include <dji_sdk/LEDLogout.h>
+#include <dji_sdk/LEDRegister.h>
+#include <dji_sdk/LEDStart.h>
+
 
 #endif

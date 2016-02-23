@@ -13,7 +13,7 @@ void LED::getLEDInfo(CallBack callback, UserData userData)
 			100, 3, callback ? callback : LED::getLEDInfoCallback, userData);
 }
 
-void LED::getLEDInfoCallback(CoreAPI *This, Header *header, UserData userData __UNUSED)
+void LED::getLEDInfoCallback(CoreAPI *This, Header *header, UserData userData)
 {
 	LED::LEDInfo ledInfo;
 	
@@ -71,16 +71,16 @@ void LED::logoutLEDCallback (CoreAPI *This, Header * header, UserData userData)
 	printf("logout surplus_action_num%d \n", ack.surplus_action_num);
 }
 
-void LED::setLEDAction(SetLEDAction LEDAction, CallBack callback, UserData userData)
+void LED::startLED(SetLEDAction LEDAction, CallBack callback, UserData userData)
 {
 
 	api->send(2, encrypt, SET_LED, LED_SET_STATUS, 
 			(unsigned char*)&LEDAction, 
 			sizeof(LEDAction), 100, 3, 
-			callback ? callback:LED::setLEDActionCallback, userData);
+			callback ? callback:LED::startLEDCallback, userData);
 }
 
-void LED::setLEDActionCallback(CoreAPI *This, Header *header, UserData userData)
+void LED::startLEDCallback(CoreAPI *This, Header *header, UserData userData)
 {
 	unsigned char ack;
 	memcpy((unsigned char *)&ack, 

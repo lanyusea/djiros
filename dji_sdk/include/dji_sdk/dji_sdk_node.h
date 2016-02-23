@@ -105,6 +105,11 @@ private:
 	ros::ServiceServer sync_flag_control_service;
 	ros::ServiceServer message_frequency_control_service;
 
+	ros::ServiceServer led_query_service;
+	ros::ServiceServer led_register_service;
+	ros::ServiceServer led_logout_service;
+	ros::ServiceServer led_start_service;
+
 	bool activation_callback(dji_sdk::Activation::Request& request, dji_sdk::Activation::Response& response);
     bool attitude_control_callback(dji_sdk::AttitudeControl::Request& request, dji_sdk::AttitudeControl::Response& response);
     bool camera_action_control_callback(dji_sdk::CameraActionControl::Request& request, dji_sdk::CameraActionControl::Response& response);
@@ -122,6 +127,10 @@ private:
 	bool message_frequency_control_callback(dji_sdk::MessageFrequencyControl::Request& request, dji_sdk::MessageFrequencyControl::Response& response);
 	bool version_check_callback(dji_sdk::VersionCheck::Request& requset, dji_sdk::VersionCheck::Response& response);
 	bool send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDevice::Request& request, dji_sdk::SendDataToRemoteDevice::Response& response);
+	bool led_query_callback(dji_sdk::LEDQuery::Request& request, dji_sdk::LEDQuery::Response& response);
+	bool led_register_callback(dji_sdk::LEDRegister::Request& request, dji_sdk::LEDRegister::Response& response);
+	bool led_logout_callback(dji_sdk::LEDLogout::Request& request, dji_sdk::LEDLogout::Response& response);
+	bool led_start_callback(dji_sdk::LEDStart::Request& request, dji_sdk::LEDStart::Response& response);
 
     void init_services(ros::NodeHandle& nh)
     {
@@ -142,6 +151,10 @@ private:
 		sync_flag_control_service = nh.advertiseService("dji_sdk/sync_flag_control", &DJISDKNode::sync_flag_control_callback, this);
 		message_frequency_control_service = nh.advertiseService("dji_sdk/message_frequency_control", &DJISDKNode::message_frequency_control_callback, this);
 		send_data_to_remote_device_service = nh.advertiseService("dji_sdk/send_data_to_remote_device", &DJISDKNode::send_data_to_remote_device_callback,this);
+		led_query_service = nh.advertiseService("dji_sdk/led_query", &DJISDKNode::led_query_callback, this);
+		led_register_service = nh.advertiseService("dji_sdk/led_register", &DJISDKNode::led_register_callback, this);
+		led_logout_service = nh.advertiseService("dji_sdk/led_logout", &DJISDKNode::led_logout_callback, this);
+		led_start_service = nh.advertiseService("dji_sdk/led_start", &DJISDKNode::led_start_callback, this);
     }
 
 //Actions:

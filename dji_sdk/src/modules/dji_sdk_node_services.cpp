@@ -287,3 +287,53 @@ bool DJISDKNode::send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDe
 	response.result = true;
 	return true;
 }
+
+bool DJISDKNode::led_query_callback(dji_sdk::LEDQuery::Request& request, dji_sdk::LEDQuery::Response& response)
+{
+	rosAdapter->led->getLEDInfo();
+
+	return true;
+}
+
+bool DJISDKNode::led_register_callback(dji_sdk::LEDRegister::Request& request, dji_sdk::LEDRegister::Response& response)
+{
+
+	DJI::onboardSDK::LED::RegisterLED led_data;
+	led_data.generate_flag = request.generate_flag;
+	led_data.requester_id = request.requester_id;
+	led_data.identity_id = request.identity_id;
+	led_data.priority = request.priority;
+	led_data.show_times = request.show_times;
+	for (int i = 0; i < 8; i++)	{
+		led_data.actions[i][0] = request.action_color[i];
+		led_data.actions[i][1] = request.action_time[i];
+	}
+
+	rosAdapter->led->registerLED(led_data);
+	return true;
+}
+
+bool DJISDKNode::led_logout_callback(dji_sdk::LEDLogout::Request& request, dji_sdk::LEDLogout::Response& response)
+{
+	DJI::onboardSDK::LED::LogoutLED led_data;
+	led_data.action_num = 1; //we only logoout one pattern once
+	led_data.requester_id = request.requester_id;
+	led_data.action_id[0] = request.action_id;
+
+	rosAdapter->led->logoutLED(led_data);
+	return true;
+}
+
+bool DJISDKNode::led_start_callback(dji_sdk::LEDStart::Request& request, dji_sdk::LEDStart::Response& response)
+{
+	DJI::onboardSDK::LED::SetLEDAction led_data;
+	led_data.action_num = request.action_num;
+	led_data.requester_id = request.requester_id;
+	for (int i = 0; i < 5; i++)	{
+		led_data.action_status[i].id = request.action_id[i];
+		led_data.action_status[i].status = request.status[i];
+	}
+
+	rosAdapter->led->startLED(led_data);
+	return true;
+}

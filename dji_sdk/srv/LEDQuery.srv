@@ -1,0 +1,5 @@
+---
+uint8 colors_num
+uint8 max_actino_num
+uint8 surplus_action_num
+uint8[12] colors

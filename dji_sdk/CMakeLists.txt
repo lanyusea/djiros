@@ -120,6 +120,11 @@ add_service_files(
   MissionHpResetYaw.srv
   MissionFmUpload.srv
   MissionFmSetTarget.srv
+
+  LEDQuery.srv
+  LEDLogout.srv
+  LEDRegister.srv
+  LEDStart.srv
 )
 
 ## Generate actions in the 'action' folder
