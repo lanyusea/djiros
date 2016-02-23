@@ -729,6 +729,10 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
 DJISDKNode::~DJISDKNode()
 {
     delete rosAdapter;
+    delete drone_task_action_server;
+    delete local_position_navigation_action_server;
+    delete global_position_navigation_action_server;
+    delete waypoint_navigation_action_server;
 }
 
 //
