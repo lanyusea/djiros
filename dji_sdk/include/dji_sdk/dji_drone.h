@@ -10,6 +10,7 @@
 #include <actionlib/client/terminal_state.h> 
 #include <string>
 
+namespace dji_sdk {
 class DJIDrone
 {
 private:
@@ -501,5 +502,6 @@ public:
 	}
 	
 };
+}
 
 #endif

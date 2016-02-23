@@ -1,8 +1,5 @@
-#include <ros/ros.h>
 #include <dji_sdk/dji_drone.h>
 #include <cstdlib>
-#include <actionlib/client/simple_action_client.h>
-#include <actionlib/client/terminal_state.h>
 
 using namespace DJI::onboardSDK;
 
@@ -39,7 +36,7 @@ int main(int argc, char **argv)
     bool err_flag = false;
     ros::init(argc, argv, "dji_sdk_client");
     ros::NodeHandle nh;
-    DJIDrone* drone = new DJIDrone(nh);
+    dji_sdk::DJIDrone* drone = new dji_sdk::DJIDrone(nh);
 
     dji_sdk::WaypointList newWaypointList;
     dji_sdk::Waypoint waypoint0;
