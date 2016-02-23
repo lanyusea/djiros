@@ -2,7 +2,7 @@
 
 <launch>
     <arg name="serial_name" default=""/>
-    <arg name="manager" default="standalone_nodelet" />
+    <arg name="manager" default="/standalone_nodelet" />
     <arg name="drone_name" default="/" />
 
     <node pkg="nodelet" type="nodelet" name="dji_sdk_node" args="load dji_sdk/DJISDKNodelet $(arg manager)" output="screen" ns="$(arg drone_name)">

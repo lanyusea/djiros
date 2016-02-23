@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-	    <include file="$(find dji_sdk)/launch/dji_sdk_node.launch.xml">
-	        <arg name="serial_name" value="/dev/cu.usbserial-A603T4HK"/>
-	        <arg name="drone_name" value="drone1"/>
-	    </include>
-
-</launch>

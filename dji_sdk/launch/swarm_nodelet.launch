@@ -1,18 +1,17 @@
 <?xml version="1.0"?>
 
 <launch>
-	<node pkg="nodelet" type="nodelet" name="standalone_nodelet" respawn="false" args="manager" output="screen"/>
+    <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager" output="screen"/>
 
-  	<group ns="drone1">
-	    <include file="$(find dji_sdk)/launch/dji_sdk_nodelet.launch.xml">
-        	<arg name="serial_name" value="/dev/ttyUSB0"/>
-    	</include>
-	</group>
+    <include file="$(find dji_sdk)/launch/dji_sdk_node.launch.xml">
+        <arg name="serial_name" value="/dev/cu.usbserial-A603T4HK"/>
+        <arg name="drone_name" default="drone1" />
+        <arg name="manager" default="/standalone_nodelet" />
+    </include>
 
-    <group ns="drone2">
-	    <include file="$(find dji_sdk)/launch/dji_sdk_nodelet.launch.xml">
-        	<arg name="serial_name" value="/dev/ttyUSB1"/>
-    	</include>
-	</group>
-
+    <include file="$(find dji_sdk)/launch/dji_sdk_node.launch.xml">
+        <arg name="serial_name" value="/dev/cu.usbserial-A603T4HK"/>
+        <arg name="drone_name" default="drone2" />
+        <arg name="manager" default="/standalone_nodelet" />
+    </include>
 </launch>
