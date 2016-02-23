@@ -94,7 +94,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES dji_sdk_nodelet dji_sdk_node
+  LIBRARIES dji_sdk_nodelet 
   CATKIN_DEPENDS message_runtime actionlib actionlib_msgs geometry_msgs nav_msgs std_msgs tf dji_sdk_lib nodelet
   DEPENDS 
 )
@@ -112,11 +112,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(dji_sdk_node
+add_executable(dji_sdk_node 
   src/dji_sdk_node.cpp 
-  src/modules/dji_sdk_node_actions.cpp 
-  src/modules/dji_sdk_node_services.cpp 
-  src/modules/dji_sdk_node_main.cpp 
+  src/dji_sdk_node_main.cpp
 )
 
 add_dependencies(dji_sdk_node
@@ -127,10 +125,8 @@ target_link_libraries(dji_sdk_node
 )
 
 add_library(dji_sdk_nodelet
+  src/dji_sdk_node.cpp 
   src/dji_sdk_nodelet.cpp
-  src/modules/dji_sdk_node_actions.cpp 
-  src/modules/dji_sdk_node_services.cpp 
-  src/modules/dji_sdk_node_main.cpp 
 )
 
 add_dependencies(dji_sdk_nodelet
@@ -139,7 +135,6 @@ add_dependencies(dji_sdk_nodelet
 target_link_libraries(dji_sdk_nodelet 
   ${catkin_LIBRARIES}
 )
-
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
