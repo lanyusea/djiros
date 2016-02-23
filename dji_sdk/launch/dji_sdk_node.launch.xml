@@ -2,10 +2,11 @@
 
 <launch>
     <arg name="serial_name" default=""/>
+    <arg name="drone_name" default="/" />
 
-    <node pkg="dji_sdk" type="dji_sdk_node" name="dji_sdk_node" output="screen">
+    <node pkg="dji_sdk" type="dji_sdk_node" name="dji_sdk_node" output="screen" ns="$(arg drone_name)">
         <!-- node parameters -->
-        <param name="tf_prefix" type="string" value="$(optenv ROS_NAMESPACE)"/>
+        <param name="tf_prefix" type="string" value="$(arg drone_name)"/>
         <param name="serial_name" type="string" value="$(arg serial_name)"/>
         <param name="baud_rate" type="int" value="230400"/>
         <param name="app_id" type="int" value="1022384"/>

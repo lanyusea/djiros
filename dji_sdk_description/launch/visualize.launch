@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="model_name" default="dji_s1000"/>
+  <arg name="model_name" default="dji_phantom2"/>
   <arg name="model" default="$(find dji_sdk_description)/urdf/$(arg model_name).urdf.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
 
