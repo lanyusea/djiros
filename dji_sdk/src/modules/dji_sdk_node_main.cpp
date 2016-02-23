@@ -17,9 +17,6 @@ void DJISDKNode::broadcast_callback()
     DJI::onboardSDK::BroadcastData bc_data = rosAdapter->getBroadcastData();
     unsigned short msg_flags = bc_data.dataFlag;
 
-    static int frame_id = 0;
-    frame_id ++;
-
     auto current_time = ros::Time::now();
 
     //update attitude msg
@@ -98,7 +95,7 @@ void DJISDKNode::broadcast_callback()
 
     //update gimbal msg
     if (msg_flags & HAS_GIMBAL) {
-        gimbal.header.frame_id = "/gimbal";
+        gimbal.header.frame_id = tf::resolve(tf_prefix, "base_link");
         gimbal.header.stamp = current_time;
         gimbal.ts = bc_data.timeStamp;
         gimbal.roll = bc_data.gimbal.roll;
@@ -106,10 +103,12 @@ void DJISDKNode::broadcast_callback()
         gimbal.yaw = bc_data.gimbal.yaw;
         gimbal_publisher.publish(gimbal);
 
+        tf::Quaternion quaternion;
+        quaternion.setRPY(gimbal.roll, gimbal.pitch, gimbal.yaw);
         br.sendTransform(tf::StampedTransform(tf::Transform(
-            tf::Quaternion(gimbal.yaw, gimbal.pitch, gimbal.roll), 
+            quaternion, 
             tf::Vector3(0, 0, 0)), 
-            current_time, "base_link", "gimbal_link"));
+            current_time, tf::resolve(tf_prefix, "base_link"), tf::resolve(tf_prefix, "gimbal")));
     }
 
     //update odom msg
@@ -134,7 +133,7 @@ void DJISDKNode::broadcast_callback()
         br.sendTransform(tf::StampedTransform(tf::Transform(
             tf::Quaternion(attitude_quaternion.q0, attitude_quaternion.q1, attitude_quaternion.q2, attitude_quaternion.q3), 
             tf::Vector3(local_position.x, local_position.y, local_position.z)), 
-            current_time, "world", "base_link"));
+            current_time, "/world", tf::resolve(tf_prefix, "base_link")));
     }
 
     //update rc_channel msg
@@ -205,6 +204,7 @@ void DJISDKNode::init_parameters_and_activate(ros::NodeHandle& nh_private)
     std::string app_bundle_id;
     std::string enc_key;
 
+    tf_prefix = tf::getPrefixParam(nh_private);
     nh_private.param("serial_name", serial_name, std::string("/dev/cu.usbserial-A603T4HK"));
     nh_private.param("baud_rate", baud_rate, 230400);
     nh_private.param("app_id", app_id, 1022384);

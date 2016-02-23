@@ -2,23 +2,24 @@
 #define DJI_HARDDRIVER_MANIFOLD_H
 
 
-#include <stdio.h>
-#include <string>
-#include <string.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <pthread.h>
 #include <fcntl.h>
-#include <termios.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
 #include <sys/time.h>
-#include <dji_sdk_lib/DJI_Type.h>
-#include <dji_sdk_lib/DJI_HardDriver.h>
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
+
+#include <dji_sdk_lib/DJI_Type.h>
+#include <dji_sdk_lib/DJI_HardDriver.h>
 
 namespace DJI {
 

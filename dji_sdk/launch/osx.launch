@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 
 <launch>
-    <include file="$(find dji_sdk)/launch/onboard_sdk.launch">
+    <include file="$(find dji_sdk)/launch/dji_sdk_node.launch.xml">
         <arg name="serial_name" value="/dev/cu.usbserial-A603T4HK"/>
     </include>
+
 </launch>

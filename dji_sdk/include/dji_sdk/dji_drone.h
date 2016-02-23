@@ -1,8 +1,9 @@
 #ifndef DJI_DRONE_H
 #define DJI_DRONE_H
 
-#include <dji_sdk/dji_sdk.h>
 #include <ros/ros.h>
+
+#include <dji_sdk/dji_sdk.h>
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/UInt8.h>
 #include <actionlib/client/simple_action_client.h> 

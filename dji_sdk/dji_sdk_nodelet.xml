@@ -1,0 +1,8 @@
+
+<library path="lib/libdji_sdk_nodelet">
+  <class name="dji_sdk/DJISDKNodelet" type="dji_sdk::DJISDKNodelet" base_class_type="nodelet::Nodelet">
+  <description>
+  	DJI SDK nodelet
+  </description>
+  </class>
+</library>

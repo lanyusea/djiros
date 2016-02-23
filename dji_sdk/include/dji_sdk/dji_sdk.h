@@ -14,10 +14,10 @@
 #include <dji_sdk/LocalPosition.h>
 #include <dji_sdk/PowerStatus.h>
 #include <dji_sdk/RCChannels.h>
+#include <dji_sdk/TransparentTransmissionData.h>
 #include <dji_sdk/Velocity.h>
 #include <dji_sdk/Waypoint.h>
 #include <dji_sdk/WaypointList.h>
-#include <dji_sdk/TransparentTransmissionData.h>
 
 //srvs
 #include <dji_sdk/AttitudeControl.h>
@@ -28,8 +28,8 @@
 #include <dji_sdk/GlobalPositionControl.h>
 #include <dji_sdk/LocalPositionControl.h>
 #include <dji_sdk/SDKPermissionControl.h>
-#include <dji_sdk/VelocityControl.h>
 #include <dji_sdk/SendDataToRemoteDevice.h>
+#include <dji_sdk/VelocityControl.h>
 
 //actions
 #include <dji_sdk/DroneTaskAction.h>

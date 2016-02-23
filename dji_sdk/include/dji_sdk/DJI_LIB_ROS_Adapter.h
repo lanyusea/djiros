@@ -4,14 +4,13 @@
 #include "DJI_HardDriver_Unix.h"
 #include <dji_sdk_lib/DJI_API.h>
 #include <dji_sdk_lib/DJI_App.h>
-#include <dji_sdk_lib/DJI_Flight.h>
 #include <dji_sdk_lib/DJI_Camera.h>
+#include <dji_sdk_lib/DJI_Flight.h>
+#include <dji_sdk_lib/DJI_Follow.h>
+#include <dji_sdk_lib/DJI_HotPoint.h>
 #include <dji_sdk_lib/DJI_VirtualRC.h>
 #include <dji_sdk_lib/DJI_WayPoint.h>
-#include <dji_sdk_lib/DJI_HotPoint.h>
-#include <dji_sdk_lib/DJI_Follow.h>
 
-#include <ros/ros.h>
 #include <stdlib.h>
 #include <string>
 #include <pthread.h>

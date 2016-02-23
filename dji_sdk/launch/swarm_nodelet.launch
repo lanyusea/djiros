@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node pkg="nodelet" type="nodelet" name="standalone_nodelet" respawn="false" args="manager" output="screen"/>
+
+  	<group ns="drone1">
+	    <include file="$(find dji_sdk)/launch/dji_sdk_nodelet.launch.xml">
+        	<arg name="serial_name" value="/dev/ttyUSB0"/>
+    	</include>
+	</group>
+
+    <group ns="drone2">
+	    <include file="$(find dji_sdk)/launch/dji_sdk_nodelet.launch.xml">
+        	<arg name="serial_name" value="/dev/ttyUSB1"/>
+    	</include>
+	</group>
+
+</launch>
