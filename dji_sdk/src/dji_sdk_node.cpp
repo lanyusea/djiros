@@ -581,6 +581,7 @@ void DJISDKNode::broadcast_callback()
 
         tf::Quaternion quaternion;
         quaternion.setRPY(gimbal.roll, gimbal.pitch, gimbal.yaw);
+
         br.sendTransform(tf::StampedTransform(tf::Transform(
             quaternion, 
             tf::Vector3(0, 0, 0)), 
@@ -606,8 +607,11 @@ void DJISDKNode::broadcast_callback()
         odometry.twist.twist.linear.z = velocity.vz;
         odometry_publisher.publish(odometry);
 
+        tf::Quaternion quaternion;
+        tf::quaternionMsgToTF(odometry.pose.pose.orientation, quaternion);
+
         br.sendTransform(tf::StampedTransform(tf::Transform(
-            tf::Quaternion(attitude_quaternion.q0, attitude_quaternion.q1, attitude_quaternion.q2, attitude_quaternion.q3), 
+            quaternion, 
             tf::Vector3(local_position.x, local_position.y, local_position.z)), 
             current_time, "/world", tf::resolve(tf_prefix, "base_link")));
     }

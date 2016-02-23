@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="crazyflie">
+
+  <link name="base_link">
+    <inertial>
+       	<mass value="1.477" />
+    	<origin xyz="0 0 0" />
+        <!-- ToDo: This is not correct! -->	    
+        <inertia ixx="0.01152" ixy="0.0" ixz="0.0" iyy="0.01152" iyz="0.0" izz="0.0218" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://dji_sdk_description/meshes/dji_s1000.dae"/>
+      </geometry>
+    </visual>
+
+    <!-- ToDo: insert collision model -->
+
+  </link>
+
+</robot>
+

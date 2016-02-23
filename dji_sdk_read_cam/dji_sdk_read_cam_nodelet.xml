@@ -1,0 +1,7 @@
+<library path="lib/libdji_sdk_read_cam_nodelet">
+  <class name="dji_sdk/DJISDKReadCamNodelet" type="dji_sdk::DJISDKReadCamNodelet" base_class_type="nodelet::Nodelet">
+  <description>
+  	DJI SDK read cam nodelet
+  </description>
+  </class>
+</library>

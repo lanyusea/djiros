@@ -36,7 +36,7 @@ link_directories(
   /usr/lib/arm-linux-gnueabihf 
   /usr/lib)
 
-#if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
 
   add_executable(dji_sdk_read_cam_node 
     src/dji_sdk_read_cam_node_main.cpp)
@@ -67,6 +67,6 @@ link_directories(
     PATTERN ".svn" EXCLUDE
   )
 
-#endif()
+endif()
 
 

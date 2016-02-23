@@ -1,7 +1,7 @@
 <package>
-  <name>dji_sdk_visualization</name>
+  <name>dji_sdk_description</name>
   <version>0.1.0</version>
-  <description>dji_sdk_visualization</description>
+  <description>dji_sdk_desciption</description>
 
   <maintainer email="me@botao.hu">Botao Amber Hu</maintainer>
 
