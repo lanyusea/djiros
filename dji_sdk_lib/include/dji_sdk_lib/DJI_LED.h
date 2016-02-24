@@ -68,6 +68,7 @@ public:
 		LEDActionStatus action_status[5];
 	} SetLEDAction;
 
+#pragma pack()
 
 	enum LEDAction
 	{
