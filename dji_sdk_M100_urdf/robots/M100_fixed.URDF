@@ -1,0 +1,43 @@
+<robot
+  name="M100_fixed">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00071795 -0.015779 -0.034723"
+        rpy="0 0 0" />
+      <mass
+        value="2.6" />
+      <inertia
+        ixx="0.019226"
+        ixy="8.1688E-05"
+        ixz="0.00043758"
+        iyy="0.018142"
+        iyz="0.00062678"
+        izz="0.032239" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/fixed/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/fixed/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

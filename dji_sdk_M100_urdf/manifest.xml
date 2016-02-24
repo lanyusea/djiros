@@ -1,0 +1,6 @@
+<package>
+  <description brief="dji_sdk_M100_urdf">M100_urdf</description>
+  <depend package="gazebo" />
+  <author>me</author>
+  <license>BSD</license>
+</package>

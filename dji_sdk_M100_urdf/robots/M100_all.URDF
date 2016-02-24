@@ -1,0 +1,255 @@
+<robot
+  name="M100_all">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00074527 -0.03719 0.016379"
+        rpy="0 0 0" />
+      <mass
+        value="2.6" />
+      <inertia
+        ixx="0.016594"
+        ixy="0.00043969"
+        ixz="-8.2162E-05"
+        iyy="0.027496"
+        iyz="-0.0005805"
+        izz="0.01565" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="M1">
+    <inertial>
+      <origin
+        xyz="-4.6815E-08 -3.1231E-06 -0.0062814"
+        rpy="0 0 0" />
+      <mass
+        value="0.010889" />
+      <inertia
+        ixx="3.2781E-05"
+        ixy="-4.5592E-07"
+        ixz="-1.3065E-12"
+        iyy="5.3351E-07"
+        iyz="1.6039E-13"
+        izz="3.3145E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M1CCW"
+    type="continuous">
+    <origin
+      xyz="0.22978 0.22978 0.023861"
+      rpy="3.1416 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="M1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M2">
+    <inertial>
+      <origin
+        xyz="-1.3401E-07 -3.1058E-06 0.0062814"
+        rpy="0 0 0" />
+      <mass
+        value="0.010889" />
+      <inertia
+        ixx="3.2781E-05"
+        ixy="-4.5579E-07"
+        ixz="1.7994E-12"
+        iyy="5.3358E-07"
+        iyz="-1.6766E-12"
+        izz="3.3145E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M2CW"
+    type="continuous">
+    <origin
+      xyz="-0.22978 0.22978 0.023861"
+      rpy="9.796E-16 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="M2" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="M3">
+    <inertial>
+      <origin
+        xyz="-4.6805E-08 -3.1231E-06 -0.0062814"
+        rpy="0 0 0" />
+      <mass
+        value="0.010889" />
+      <inertia
+        ixx="3.2781E-05"
+        ixy="-4.5592E-07"
+        ixz="-1.3066E-12"
+        iyy="5.3351E-07"
+        iyz="1.6024E-13"
+        izz="3.3145E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M3CCW"
+    type="continuous">
+    <origin
+      xyz="-0.22978 -0.22978 0.023861"
+      rpy="3.1416 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="M3" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M4">
+    <inertial>
+      <origin
+        xyz="-1.3408E-07 -3.1059E-06 0.0062814"
+        rpy="0 0 0" />
+      <mass
+        value="0.010889" />
+      <inertia
+        ixx="3.2781E-05"
+        ixy="-4.5579E-07"
+        ixz="1.7987E-12"
+        iyy="5.3358E-07"
+        iyz="-1.6775E-12"
+        izz="3.3145E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/all/M4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M4CW"
+    type="continuous">
+    <origin
+      xyz="0.22978 -0.22978 0.023861"
+      rpy="-1.796E-15 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="M4" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+</robot>

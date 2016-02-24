@@ -1,0 +1,43 @@
+<robot
+  name="M100_Airframe__CAD.SLDASM">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00074527 -0.016379 -0.03719"
+        rpy="0 0 0" />
+      <mass
+        value="2.6" />
+      <inertia
+        ixx="0.016594"
+        ixy="8.2162E-05"
+        ixz="0.00043969"
+        iyy="0.01565"
+        iyz="0.0005805"
+        izz="0.027496" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/basic/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://dji_sdk_M100_urdf/meshes/basic/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
