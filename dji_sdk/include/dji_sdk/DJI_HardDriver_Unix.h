@@ -1,6 +1,7 @@
 #ifndef DJI_HARDDRIVER_MANIFOLD_H
 #define DJI_HARDDRIVER_MANIFOLD_H
 
+#include <ros/ros.h>
 
 #include <fcntl.h>
 #include <pthread.h>

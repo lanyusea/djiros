@@ -4,6 +4,7 @@
     <arg name="serial_name" default=""/>
     <arg name="manager" default="/standalone_nodelet" />
     <arg name="drone_name" default="/" />
+    <arg name="start_nodelet_manager" default="false" />
 
     <node pkg="nodelet" type="nodelet" name="dji_sdk_node" args="load dji_sdk/DJISDKNodelet $(arg manager)" output="screen" ns="$(arg drone_name)">
         <!-- node parameters -->
@@ -16,4 +17,7 @@
         <param name="app_bundle_id" type="string" value="Welcome to use dji-sdk"/>
         <param name="enc_key" type="string" value="e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"/>
     </node>
+
+    <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager" output="screen" if="$(arg start_nodelet_manager)"/>
+
 </launch>
