@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES dji_sdk_read_cam_nodelet 
-  CATKIN_DEPENDS cv_bridge image_transport nodelet roscpp sensor_msgs std_msgs
+  CATKIN_DEPENDS tf cv_bridge image_transport nodelet roscpp sensor_msgs std_msgs
   DEPENDS 
 )
 
@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   nodelet
+  tf
 )
 
 find_package(OpenCV REQUIRED)
