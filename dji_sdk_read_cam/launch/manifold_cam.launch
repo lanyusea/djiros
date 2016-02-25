@@ -1,6 +1,6 @@
 <launch>
 	<arg name="namespace" default="/"/>
-	<node pkg="dji_sdk_read_cam" type="dji_sdk_read_cam" name="dji_sdk_read_cam" ns="$(arg namespace)" launch-prefix="sudo rosenv">
+	<node pkg="dji_sdk_read_cam" type="dji_sdk_read_cam" name="dji_sdk_read_cam" ns="$(arg namespace)">
 		<!-- node parameters -->
 		<param name="output_image_color" type="bool" value="true"/>
 		<param name="image_width" type="int" value="1280"/>

@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   nodelet
+  tf
 )
 
 find_package(OpenCV REQUIRED)

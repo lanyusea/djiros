@@ -32,7 +32,7 @@ include_directories(include/dji_sdk_lib)
 FILE(GLOB DJI_SDK_LIB_SOURCES src/*.cpp)
 
 add_library(dji_sdk_lib
-    STATIC  #change into `SHARED` if you met a bad value: `.rodata' can not be used when making a shared object; recompile with -fPIC
+    SHARED #maybe STATIC sometimes
 	${DJI_SDK_LIB_SOURCES}
 )
 ## Add cmake target dependencies of the library
