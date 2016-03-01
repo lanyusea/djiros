@@ -11,7 +11,7 @@ This video-decoding package is a specifically desiged package for Manifold to re
 
 
 ###Note:
-1. This package is specially designed for Manifold.
+1. This package is specially designed for Manifold. You may need to install libopencv-dev and tf at first.
 2. The RC controller must be connected to Matrice 100 in order to get the video stream.
 3. The DJI Go has a power-saving strategy, users should either enter the camera view or do not run DJI GO at first in order to get the video stream. The video will be freezed if uses stay in the main screen of DJI GO. 
 3. This package does not provice video transparent transmission. You cannot see the video on DJI Go while running this package.

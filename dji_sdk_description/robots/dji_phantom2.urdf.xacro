@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="crazyflie">
-
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dji_phantom2">
+  <xacro:property name="M_PI" value="3.1415926535897931" /> 
   <link name="base_link">
     <inertial>
        	<mass value="1.477" />
@@ -11,7 +11,7 @@
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
       <geometry>
         <mesh filename="package://dji_sdk_description/meshes/dji_phantom2.dae"/>
       </geometry>

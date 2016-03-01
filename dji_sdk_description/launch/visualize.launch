@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="model_name" default="dji_phantom2"/>
-  <arg name="model" default="$(find dji_sdk_description)/urdf/$(arg model_name).urdf.xacro"/>
+  <arg name="model_name" default="dji_m100"/>
+  <arg name="model" default="$(find dji_sdk_description)/robots/$(arg model_name).urdf.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
 
   <arg name="x" default="0.0"/>
@@ -18,6 +18,6 @@
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
 
   <!-- Start rviz visualization with preset config -->    
-  <node name="rviz" pkg="rviz" type="rviz" args="$(find dji_sdk_description)/rviz_cfg/dji_sdk.rviz" required="true" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find dji_sdk_description)/rviz_cfg/dji_sdk.rviz" />
 
 </launch>
