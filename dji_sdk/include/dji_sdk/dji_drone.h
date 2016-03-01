@@ -74,80 +74,80 @@ public:
 	std::vector<DataHandler> data_received_from_remote_device_callbacks;
 
 private:
-	void acceleration_subscriber_callback(dji_sdk::Acceleration acceleration)
+	void acceleration_subscriber_callback(const dji_sdk::Acceleration::ConstPtr& acceleration)
 	{
-		this->acceleration = acceleration;
+		this->acceleration = *acceleration;
 	}
 
-	void attitude_quaternion_subscriber_callback(dji_sdk::AttitudeQuaternion attitude_quaternion)
+	void attitude_quaternion_subscriber_callback(const dji_sdk::AttitudeQuaternion::ConstPtr& attitude_quaternion)
 	{
-		this->attitude_quaternion = attitude_quaternion;
+		this->attitude_quaternion = *attitude_quaternion;
 	}
 
-	void compass_subscriber_callback(dji_sdk::Compass compass)
+	void compass_subscriber_callback(const dji_sdk::Compass::ConstPtr& compass)
 	{
-		this->compass = compass;
+		this->compass = *compass;
 	}
 
-	void flight_control_info_subscriber_callback(dji_sdk::FlightControlInfo flight_control_info)
+	void flight_control_info_subscriber_callback(const dji_sdk::FlightControlInfo::ConstPtr& flight_control_info)
 	{
-		this->flight_control_info = flight_control_info;
+		this->flight_control_info = *flight_control_info;
 	}
 
-	void flight_status_subscriber_callback(std_msgs::UInt8 flight_status)
+	void flight_status_subscriber_callback(const std_msgs::UInt8::ConstPtr& flight_status)
 	{
-		this->flight_status = flight_status.data;
+		this->flight_status = flight_status->data;
 	}
 
-	void gimbal_subscriber_callback(dji_sdk::Gimbal gimbal)
+	void gimbal_subscriber_callback(const dji_sdk::Gimbal::ConstPtr& gimbal)
 	{
-		this->gimbal = gimbal;
+		this->gimbal = *gimbal;
 	}
 
-	void global_position_subscriber_callback(dji_sdk::GlobalPosition global_position)
+	void global_position_subscriber_callback(const dji_sdk::GlobalPosition::ConstPtr& global_position)
 	{
-		this->global_position = global_position;
+		this->global_position = *global_position;
 	}
 
-	void local_position_subscriber_callback(dji_sdk::LocalPosition local_position)
+	void local_position_subscriber_callback(const dji_sdk::LocalPosition::ConstPtr& local_position)
 	{
-		this->local_position = local_position;
+		this->local_position = *local_position;
 	}
 
-	void power_status_subscriber_callback(dji_sdk::PowerStatus power_status)
+	void power_status_subscriber_callback(const dji_sdk::PowerStatus::ConstPtr& power_status)
 	{
-		this->power_status = power_status;
+		this->power_status = *power_status;
 	}
 
-	void rc_channels_subscriber_callback(dji_sdk::RCChannels rc_channels)
+	void rc_channels_subscriber_callback(const dji_sdk::RCChannels::ConstPtr& rc_channels)
 	{
-		this->rc_channels = rc_channels;
+		this->rc_channels = *rc_channels;
 	}
 
-	void velocity_subscriber_callback(dji_sdk::Velocity velocity)
+	void velocity_subscriber_callback(const dji_sdk::Velocity::ConstPtr& velocity)
 	{
-		this->velocity = velocity;
+		this->velocity = *velocity;
 	}
 
-	void activation_subscriber_callback(std_msgs::UInt8 activation)
+	void activation_subscriber_callback(const std_msgs::UInt8::ConstPtr& activation)
 	{
-		this->activation = activation.data;
+		this->activation = activation->data;
 	}
 
-	void odometry_subscriber_callback(nav_msgs::Odometry odometry)
+	void odometry_subscriber_callback(const nav_msgs::Odometry::ConstPtr& odometry)
 	{
-		this->odometry = odometry;
+		this->odometry = *odometry;
 	}
 
-	void sdk_permission_subscriber_callback(std_msgs::UInt8 sdk_permission)
+	void sdk_permission_subscriber_callback(const std_msgs::UInt8::ConstPtr& sdk_permission)
 	{
-		this->sdk_permission_opened = sdk_permission.data;
+		this->sdk_permission_opened = sdk_permission->data;
 	}
 
-	void data_received_from_remote_device_subscriber_callback(dji_sdk::TransparentTransmissionData data)
+	void data_received_from_remote_device_subscriber_callback(const dji_sdk::TransparentTransmissionData::ConstPtr& tt_data)
 	{
 		for (auto& callback: this->data_received_from_remote_device_callbacks) {
-			callback(data.data);
+			callback(tt_data->data);
 		}
 	}
 
@@ -269,7 +269,6 @@ public:
 		sdk_permission_control.request.control_enable = request;
 		
 		return sdk_permission_control_service.call(sdk_permission_control) && sdk_permission_control.response.result;
-
 	}
 
 	bool send_data_to_remote_device(const std::vector<uint8_t>& data)
@@ -343,7 +342,7 @@ public:
 		local_position_navigation_action_client.cancelGoalsAtAndBeforeTime(time);
 	}
 
-	dji_sdk::LocalPositionNavigationResultConstPtr local_position_navigation_get_result()
+	dji_sdk::LocalPositionNavigationResult::ConstPtr local_position_navigation_get_result()
 	{
 		return local_position_navigation_action_client.getResult();
 	}
@@ -401,7 +400,7 @@ public:
 		global_position_navigation_action_client.cancelGoalsAtAndBeforeTime(time);
 	}
 
-	dji_sdk::GlobalPositionNavigationResultConstPtr global_position_navigation_get_result()
+	dji_sdk::GlobalPositionNavigationResult::ConstPtr global_position_navigation_get_result()
 	{
 		return global_position_navigation_action_client.getResult();
 	}
@@ -460,7 +459,7 @@ public:
 		waypoint_navigation_action_client.cancelGoalsAtAndBeforeTime(time);
 	}
 
-	dji_sdk::WaypointNavigationResultConstPtr waypoint_navigation_get_result()
+	dji_sdk::WaypointNavigationResult::ConstPtr waypoint_navigation_get_result()
 	{
 		return waypoint_navigation_action_client.getResult();
 	}
