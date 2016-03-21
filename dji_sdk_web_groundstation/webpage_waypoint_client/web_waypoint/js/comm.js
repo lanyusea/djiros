@@ -49,7 +49,7 @@ function Communicator(socket) {
     //subscriber
     this.rosListener = new ROSLIB.Topic({
         ros : this.ros,
-        name : 'dji_sdk/global_position',
+        name : 'global_position',
         messageType : 'dji_sdk/GlobalPosition'
     });
     this.rosListener.subscribe(function(msg) {

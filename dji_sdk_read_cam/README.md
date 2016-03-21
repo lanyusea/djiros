@@ -5,8 +5,8 @@ This video-decoding package is a specifically desiged package for Manifold to re
 ###How to use
 1. Install the necessary library: refer [here](https://github.com/dji-sdk/manifold_cam)
 2. Delete the `CATKIN_IGNORE` file inside package and `catkin_make`.
-2. Modify the `manifold_cam.launch` in `launch` folder, set `gray_or_rgb` to 0 if the gray video stream is needed, or to 1 if you prefer the RGB format.
-3. `sudo -s` first, then `roslaunch dji_sdk_read_cam manifold_cam.launch`
+2. Modify the `dji_sdk_read_cam.launch` in `launch` folder, set `output_image_color` to `false` if the gray video stream is needed, or to `true` if you prefer the RGB format.
+3. `sudo -s` first, then `roslaunch dji_sdk_read_cam dji_sdk_read_cam.launch`
 4. The image will be published into topic `/dji_sdk/image_raw`
 
 

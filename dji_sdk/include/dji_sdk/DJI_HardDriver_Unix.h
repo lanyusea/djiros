@@ -1,29 +1,35 @@
-#ifndef __DJI_HARDDRIVER_MANIFOLD_H__
-#define __DJI_HARDDRIVER_MANIFOLD_H__
+#ifndef __DJI_SDK_DJI_HARDDRIVER_UNIX_H__
+#define __DJI_SDK_DJI_HARDDRIVER_UNIX_H__
 
-
-#include <stdio.h>
-#include <string>
-#include <string.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <pthread.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <sys/time.h>
+#include <ros/ros.h>
 #include <dji_sdk_lib/DJI_Type.h>
 #include <dji_sdk_lib/DJI_HardDriver.h>
+
+#include <fcntl.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
+
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 namespace DJI {
 
 namespace onboardSDK {
 
-class HardDriver_Manifold : public HardDriver {
+class HardDriver_Unix : public HardDriver {
 
     public:
-        HardDriver_Manifold(std::string device, unsigned int baudrate) {
+        HardDriver_Unix(std::string device, unsigned int baudrate) {
             m_device = device;
             m_baudrate = baudrate;
             m_memLock = PTHREAD_MUTEX_INITIALIZER;
@@ -31,7 +37,7 @@ class HardDriver_Manifold : public HardDriver {
         }
 
 
-        ~HardDriver_Manifold() {
+        ~HardDriver_Unix() {
             _serialClose();
         }
 
@@ -70,17 +76,16 @@ class HardDriver_Manifold : public HardDriver {
 
 
         time_ms getTimeStamp() {
-#ifdef __MACH__
-			struct timeval now;
-			gettimeofday(&now, NULL);
-			return (uint64_t)now.tv_sec * 1000 + (uint64_t) (now.tv_usec / 1.0e3);
-#else
+        #ifdef __MACH__
+            struct timeval now;
+            gettimeofday(&now, NULL);
+            return (uint64_t)now.tv_sec * 1000 + (uint64_t) (now.tv_usec / 1.0e3);
+        #else
             struct timespec time;
-			clock_gettime(CLOCK_REALTIME, &time);
-			return (uint64_t)time.tv_sec * 1000 + (uint64_t)(time.tv_nsec / 1.0e6);
-#endif
-		}
-
+            clock_gettime(CLOCK_REALTIME, &time);
+            return (uint64_t)time.tv_sec * 1000 + (uint64_t)(time.tv_nsec / 1.0e6);
+        #endif
+        }
 
         size_t send(const uint8_t *buf, size_t len) {
             return _serialWrite(buf, len);
@@ -159,8 +164,14 @@ class HardDriver_Manifold : public HardDriver {
                 B38400,
                 B57600,
                 B115200,
-                B230400,
-				B921600
+                B230400
+            #ifndef __MACH__
+                ,
+                B921600,
+                B1000000,
+                B1152000,
+                B3000000
+            #endif
             };
             int std_rate[] = {
                 4800,
@@ -169,11 +180,14 @@ class HardDriver_Manifold : public HardDriver {
                 38400,
                 57600,
                 115200,
-                230400,
-				921600,
+                230400
+            #ifndef __MACH__
+                ,
+                921600,
                 1000000,
                 1152000,
-                3000000,
+                3000000
+            #endif
             };
 
             int i,j;
@@ -295,7 +309,6 @@ class HardDriver_Manifold : public HardDriver {
                 return saved;
             }
         }
-
 
 };
 

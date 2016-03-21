@@ -26,7 +26,7 @@
 #include "dji_sdk_dji2mav/modules/hotpoint/mavHotpoint.h"
 
 
-DJIDrone* drone;
+dji_sdk::DJIDrone* drone;
 dji2mav::MavSensors* g_sensors;
 
 
@@ -149,7 +149,7 @@ void respondToHpTarget(const float hp[], uint16_t size, uint16_t cmd) {
         task.is_clockwise = 0x00;
     else
         task.is_clockwise = 0x01;
-    task.radius = abs(hp[2]);
+    task.radius = std::abs(hp[2]);
 
     //task.? = hp[3];//unused
 
@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
     ros::init(argc, argv, "dji2mav_bringup");
     ros::NodeHandle nh;
     ros::NodeHandle nh_private("~");
-    drone = new DJIDrone(nh);
+    drone = new dji_sdk::DJIDrone(nh);
 
     std::string targetIp1, targetIp2;
     int targetPort1, targetPort2;

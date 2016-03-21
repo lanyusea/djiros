@@ -1,1 +1,4 @@
-./CMakeLists.txt
+*.pyc
+/CMakeLists.txt
+**.idea
+*.orig

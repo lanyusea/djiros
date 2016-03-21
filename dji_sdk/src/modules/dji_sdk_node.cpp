@@ -1,17 +1,21 @@
-#include <dji_sdk/dji_sdk_node.h>
+#include "dji_sdk/dji_sdk_node.h"
+
 #include <functional>
-#define DEG2RAD(DEG) ((DEG)*((C_PI)/(180.0)))
+
+#define DEG2RAD(DEG) ((DEG)*((M_PI)/(180.0)))
+
+using namespace dji_sdk;
 
 //----------------------------------------------------------
 // timer spin_function 50Hz
 //----------------------------------------------------------
 
-void DJISDKNode::transparent_transmission_callback(uint8_t *buf, uint8_t len)
+void DJISDKNode::transparent_transmission_callback(uint8_t *buf, size_t len)
 {
-	dji_sdk::TransparentTransmissionData transparent_transmission_data;
-	transparent_transmission_data.data.resize(len);
-	memcpy(&transparent_transmission_data.data[0], buf, len);
-	data_received_from_remote_device_publisher.publish(transparent_transmission_data);
+    dji_sdk::TransparentTransmissionData transparent_transmission_data;
+    transparent_transmission_data.data.resize(len);
+    memcpy(&transparent_transmission_data.data[0], buf, len);
+    data_received_from_remote_device_publisher.publish(transparent_transmission_data);
 
 }
 void DJISDKNode::broadcast_callback()
@@ -53,8 +57,8 @@ void DJISDKNode::broadcast_callback()
         global_position.header.frame_id = "/world";
         global_position.header.stamp = current_time;
         global_position.ts = bc_data.timeStamp.time;
-        global_position.latitude = bc_data.pos.latitude * 180.0 / C_PI;
-        global_position.longitude = bc_data.pos.longitude * 180.0 / C_PI;
+        global_position.latitude = bc_data.pos.latitude * 180.0 / M_PI;
+        global_position.longitude = bc_data.pos.longitude * 180.0 / M_PI;
         global_position.height = bc_data.pos.height;
         global_position.altitude = bc_data.pos.altitude;
         global_position.health = bc_data.pos.health;
@@ -110,13 +114,21 @@ void DJISDKNode::broadcast_callback()
 
     //update gimbal msg
     if (msg_flags & HAS_GIMBAL) {
-        gimbal.header.frame_id = "/gimbal";
+        gimbal.header.frame_id = tf::resolve(tf_prefix, "base_link");
         gimbal.header.stamp= current_time;
         gimbal.ts = bc_data.timeStamp.time;
         gimbal.roll = bc_data.gimbal.roll;
         gimbal.pitch = bc_data.gimbal.pitch;
         gimbal.yaw = bc_data.gimbal.yaw;
         gimbal_publisher.publish(gimbal);
+
+        tf::Quaternion quaternion;
+        quaternion.setRPY(gimbal.roll, gimbal.pitch, gimbal.yaw);
+
+        br.sendTransform(tf::StampedTransform(tf::Transform(
+            quaternion, 
+            tf::Vector3(0, 0, 0)), 
+            current_time, tf::resolve(tf_prefix, "base_link"), tf::resolve(tf_prefix, "gimbal")));
     }
 
     //update odom msg
@@ -137,6 +149,14 @@ void DJISDKNode::broadcast_callback()
         odometry.twist.twist.linear.y = velocity.vy;
         odometry.twist.twist.linear.z = velocity.vz;
         odometry_publisher.publish(odometry);
+
+        tf::Quaternion quaternion;
+        tf::quaternionMsgToTF(odometry.pose.pose.orientation, quaternion);
+
+        br.sendTransform(tf::StampedTransform(tf::Transform(
+            quaternion, 
+            tf::Vector3(local_position.x, local_position.y, local_position.z)), 
+            current_time, "/world", tf::resolve(tf_prefix, "base_link")));
     }
 
     //update rc_channel msg
@@ -180,22 +200,22 @@ void DJISDKNode::broadcast_callback()
 
     //update flight control info
     if (msg_flags & HAS_DEVICE) {
-		flight_control_info.control_mode = bc_data.ctrlInfo.data;
+        flight_control_info.control_mode = bc_data.ctrlInfo.data;
         flight_control_info.cur_ctrl_dev_in_navi_mode = bc_data.ctrlInfo.device;
         flight_control_info.serial_req_status = bc_data.ctrlInfo.signature;
-		flight_control_info.virtual_rc_status = bc_data.ctrlInfo.virtualrc;
+        flight_control_info.virtual_rc_status = bc_data.ctrlInfo.virtualrc;
         flight_control_info_publisher.publish(flight_control_info);
     }
 
     //update obtaincontrol msg
-	std_msgs::UInt8 msg;
-	sdk_permission_opened = bc_data.ctrlInfo.data;
-	msg.data = bc_data.ctrlInfo.data;
-	sdk_permission_publisher.publish(msg);
+    std_msgs::UInt8 msg;
+    sdk_permission_opened = bc_data.ctrlInfo.data;
+    msg.data = bc_data.ctrlInfo.data;
+    sdk_permission_publisher.publish(msg);
 
-	activation_result = bc_data.activation;
-	msg.data = bc_data.activation;
-	activation_publisher.publish(msg);
+    activation_result = bc_data.activation;
+    msg.data = bc_data.activation;
+    activation_publisher.publish(msg);
 
 }
 
@@ -210,6 +230,8 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     std::string app_bundle_id; //reserved
     std::string enc_key;
 
+    tf_prefix = tf::getPrefixParam(nh_private);
+
     int uart_or_usb;
     int A3_or_M100;
 
@@ -217,22 +239,21 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     nh_private.param("baud_rate", baud_rate, 230400);
     nh_private.param("app_id", app_id, 1022384);
     nh_private.param("app_version", app_version, 1);
-    nh_private.param("enc_key", enc_key,
-            std::string("e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"));
+    nh_private.param("enc_key", enc_key, std::string("e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"));
 
-    nh_private.param("uart_or_usb", uart_or_usb, 0);//chosse uart as default
-    nh_private.param("A3_or_M100", A3_or_M100, 1);//chosse M100 as default
+    nh_private.param("uart_or_usb", uart_or_usb, 0); //choose uart as default
+    nh_private.param("A3_or_M100", A3_or_M100, 1); //choose M100 as default
 
     // activation
     user_act_data.ID = app_id;
 
-    if((uart_or_usb)&&(A3_or_M100))
+    if ((uart_or_usb) && (A3_or_M100))
     {
         printf("M100 does not support USB API.\n");
         return -1;
     }
 
-    if(A3_or_M100)
+    if (A3_or_M100)
     {
         user_act_data.version = 0x03010a00;
     }
@@ -240,6 +261,7 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     {
         user_act_data.version = 0x03016400;
     }
+
     user_act_data.encKey = app_key;
     strcpy(user_act_data.encKey, enc_key.c_str());
 
@@ -247,44 +269,47 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     printf("app id: %d\n", user_act_data.ID);
     printf("app version: 0x0%X\n", user_act_data.version);
     printf("app key: %s\n", user_act_data.encKey);
+    printf("connection: %s\n", (uart_or_usb) ? "USB" : "UART");
     printf("=================================================\n");
 
-    if(uart_or_usb) //use usb port for SDK
+    if (uart_or_usb) //use usb port for SDK
     {
         rosAdapter->usbHandshake(serial_name);
     }
 
     rosAdapter->init(serial_name, baud_rate);
-
     rosAdapter->activate(&user_act_data, NULL);
     rosAdapter->setBroadcastCallback(&DJISDKNode::broadcast_callback, this);
-	rosAdapter->setFromMobileCallback(&DJISDKNode::transparent_transmission_callback,this);
+    rosAdapter->setFromMobileCallback(&DJISDKNode::transparent_transmission_callback,this);
 
     return 0;
 }
 
-
-
 DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private) : dji_sdk_mission(nullptr)
 {
-
     init_publishers(nh);
     init_services(nh);
     init_actions(nh);
-
-    
     init_parameters(nh_private);
     
     int groundstation_enable; 
     nh_private.param("groundstation_enable", groundstation_enable, 1);
-    if(groundstation_enable)
+    if (groundstation_enable)
     {
-        dji_sdk_mission = new DJISDKMission(nh);
+        dji_sdk_mission = new DJISDKMission(nh, rosAdapter);
     }
-
 }
 
-
+DJISDKNode::~DJISDKNode()
+{
+    delete rosAdapter;
+    delete drone_task_action_server;
+    delete local_position_navigation_action_server;
+    delete global_position_navigation_action_server;
+    delete waypoint_navigation_action_server;
+    if (dji_sdk_mission)
+        delete dji_sdk_mission;
+}
 
 inline void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
             double gps_t_lon, double gps_t_lat,
@@ -295,8 +320,6 @@ inline void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
     ned_x = DEG2RAD(d_lat) * C_EARTH;
     ned_y = DEG2RAD(d_lon) * C_EARTH * cos(DEG2RAD(gps_t_lat));
 }
-
-
 
 dji_sdk::LocalPosition DJISDKNode::gps_convert_ned(dji_sdk::GlobalPosition loc)
 {

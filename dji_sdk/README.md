@@ -9,7 +9,6 @@ Please check the [Appendix](../dji_sdk_doc/Appendix.md) for the detail of all pu
 
 ###Directory Structure
 * include/dji_sdk: header files
-* include/dji_sdk/DJI_LIB: DJI Onboard SDK API library
 * action: ROS action files
 * launch: ROS launch files
 * msg: ROS message files
@@ -19,11 +18,11 @@ Please check the [Appendix](../dji_sdk_doc/Appendix.md) for the detail of all pu
 
 ###How to use
 1. Install and configure your hardware correctly.
-2. Enter the following info into *dji_sdk/launch/sdk_manifold.launch*.
+2. Enter the following info into *dji_sdk/launch/dji_sdk_node.launch.xml*.
 	* APP ID
 	* APP Level
 	* Communication Key
 	* uart device name
 	* baudrate
-3. Use `roslaunch dji_sdk sdk_manifold.launch` to start the core node.
+3. Use `roslaunch dji_sdk tegra.launch` if you're on a manifold to start the core node.
 

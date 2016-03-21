@@ -1,13 +1,13 @@
-#ifndef __DJI_MISSION_NODE_H__
-#define __DJI_MISSION_NODE_H__
+#ifndef __DJI_SDK_DJI_SDK_MISSION_H__
+#define __DJI_SDK_DJI_SDK_MISSION_H__
+
+#include "dji_sdk/DJI_LIB_ROS_Adapter.h"
+#include "dji_sdk/dji_sdk.h"
 
 #include <ros/ros.h>
-#include <dji_sdk/dji_sdk.h>
 
-#define C_PI (double) 3.141592653589793
-
-extern DJI::onboardSDK::ROSAdapter *rosAdapter;
-
+namespace dji_sdk {
+	
 enum class MissionType 
 {
 	EMPTY,
@@ -19,6 +19,8 @@ enum class MissionType
 class DJISDKMission
 {
 private:
+	DJI::onboardSDK::ROSAdapter* rosAdapter;
+
 	dji_sdk::MissionPushInfo mission_status;
 	dji_sdk::MissionPushInfo mission_event;
 
@@ -27,9 +29,9 @@ private:
 	dji_sdk::MissionFollowmeTask followme_task;
 	
 public:
-	DJISDKMission(ros::NodeHandle& nh);
-	void mission_status_callback(uint8_t *buf, uint8_t len);
-	void mission_event_callback(uint8_t *buf, uint8_t len);
+	DJISDKMission(ros::NodeHandle& nh, DJI::onboardSDK::ROSAdapter* rosAdapter);
+	void mission_status_callback(uint8_t *buf, size_t len);
+	void mission_event_callback(uint8_t *buf, size_t len);
 private:
 	//mission data publisher, processing data from N1
 	ros::Publisher mission_status_publisher;
@@ -77,25 +79,26 @@ private:
 
 	void init_missions(ros::NodeHandle& nh)
 	{
-		mission_status_publisher = nh.advertise<dji_sdk::MissionPushInfo>("dji_sdk/mission_status", 10);
-		mission_event_publisher = nh.advertise<dji_sdk::MissionPushInfo>("dji_sdk/mission_event", 10);
+		mission_status_publisher = nh.advertise<dji_sdk::MissionPushInfo>("mission_status", 10);
+		mission_event_publisher = nh.advertise<dji_sdk::MissionPushInfo>("mission_event", 10);
 
-		mission_start_service = nh.advertiseService("dji_sdk/mission_start", &DJISDKMission::mission_start_callback ,this);
-		mission_pause_service = nh.advertiseService("dji_sdk/mission_pause", &DJISDKMission::mission_pause_callback ,this);
-		mission_cancel_service = nh.advertiseService("dji_sdk/mission_cancel", &DJISDKMission::mission_cancel_callback ,this);
-		mission_wp_upload_service = nh.advertiseService("dji_sdk/mission_waypoint_upload", &DJISDKMission::mission_wp_upload_callback,this);
-		mission_wp_download_service = nh.advertiseService("dji_sdk/mission_waypoint_download", &DJISDKMission::mission_wp_download_callback,this);
-		mission_wp_set_speed_service = nh.advertiseService("dji_sdk/mission_waypoint_set_speed", &DJISDKMission::mission_wp_set_speed_callback ,this);
-		mission_wp_get_speed_service = nh.advertiseService("dji_sdk/mission_waypoint_get_speed", &DJISDKMission::mission_wp_get_speed_callback ,this);
-		mission_hp_upload_service = nh.advertiseService("dji_sdk/mission_hotpoint_upload", &DJISDKMission::mission_hp_upload_callback ,this);
-		mission_hp_download_service = nh.advertiseService("dji_sdk/mission_hotpoint_download", &DJISDKMission::mission_hp_download_callback,this);
-		mission_hp_set_speed_service = nh.advertiseService("dji_sdk/mission_hotpoint_set_speed", &DJISDKMission::mission_hp_set_speed_callback ,this);
-		mission_hp_set_radius_service = nh.advertiseService("dji_sdk/mission_hotpoint_set_radius", &DJISDKMission::mission_hp_set_radius_callback ,this);
-		mission_hp_reset_yaw_service = nh.advertiseService("dji_sdk/mission_hotpoint_reset_yaw", &DJISDKMission::mission_hp_reset_yaw_callback ,this);
-		mission_fm_upload_service = nh.advertiseService("dji_sdk/mission_followme_upload", &DJISDKMission::mission_fm_upload_callback ,this);
-		mission_fm_set_target_service = nh.advertiseService("dji_sdk/mission_followme_set_target", &DJISDKMission::mission_fm_set_target_callback ,this);
-
+		mission_start_service = nh.advertiseService("mission_start", &DJISDKMission::mission_start_callback, this);
+		mission_pause_service = nh.advertiseService("mission_pause", &DJISDKMission::mission_pause_callback, this);
+		mission_cancel_service = nh.advertiseService("mission_cancel", &DJISDKMission::mission_cancel_callback, this);
+		mission_wp_upload_service = nh.advertiseService("mission_waypoint_upload", &DJISDKMission::mission_wp_upload_callback, this);
+		mission_wp_download_service = nh.advertiseService("mission_waypoint_download", &DJISDKMission::mission_wp_download_callback, this);
+		mission_wp_set_speed_service = nh.advertiseService("mission_waypoint_set_speed", &DJISDKMission::mission_wp_set_speed_callback, this);
+		mission_wp_get_speed_service = nh.advertiseService("mission_waypoint_get_speed", &DJISDKMission::mission_wp_get_speed_callback, this);
+		mission_hp_upload_service = nh.advertiseService("mission_hotpoint_upload", &DJISDKMission::mission_hp_upload_callback, this);
+		mission_hp_download_service = nh.advertiseService("mission_hotpoint_download", &DJISDKMission::mission_hp_download_callback, this);
+		mission_hp_set_speed_service = nh.advertiseService("mission_hotpoint_set_speed", &DJISDKMission::mission_hp_set_speed_callback, this);
+		mission_hp_set_radius_service = nh.advertiseService("mission_hotpoint_set_radius", &DJISDKMission::mission_hp_set_radius_callback, this);
+		mission_hp_reset_yaw_service = nh.advertiseService("mission_hotpoint_reset_yaw", &DJISDKMission::mission_hp_reset_yaw_callback, this);
+		mission_fm_upload_service = nh.advertiseService("mission_followme_upload", &DJISDKMission::mission_fm_upload_callback, this);
+		mission_fm_set_target_service = nh.advertiseService("mission_followme_set_target", &DJISDKMission::mission_fm_set_target_callback, this);
 	}
 };
+
+}
 
 #endif

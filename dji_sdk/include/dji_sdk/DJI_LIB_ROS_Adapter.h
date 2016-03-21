@@ -1,21 +1,24 @@
-#ifndef _DJI_LIB_ROS_ADAPTER_H_
-#define _DJI_LIB_ROS_ADAPTER_H_
+#ifndef __DJI_SDK_DJI_LIB_ROS_ADAPTER_H__
+#define __DJI_SDK_DJI_LIB_ROS_ADAPTER_H__
 
+#include "dji_sdk/DJI_HardDriver_Unix.h"
 
-#include "DJI_HardDriver_Manifold.h"
+#include <ros/ros.h>
 #include <dji_sdk_lib/DJI_API.h>
-#include <dji_sdk_lib/DJI_Flight.h>
+#include <dji_sdk_lib/DJI_App.h>
 #include <dji_sdk_lib/DJI_Camera.h>
+#include <dji_sdk_lib/DJI_Flight.h>
+#include <dji_sdk_lib/DJI_Follow.h>
+#include <dji_sdk_lib/DJI_HotPoint.h>
 #include <dji_sdk_lib/DJI_VirtualRC.h>
 #include <dji_sdk_lib/DJI_WayPoint.h>
 #include <dji_sdk_lib/DJI_HotPoint.h>
 #include <dji_sdk_lib/DJI_Follow.h>
 
-#include <ros/ros.h>
-#include <stdlib.h>
-#include <string>
-#include <pthread.h>
+#include <cstdlib>
 #include <functional>
+#include <pthread.h>
+#include <string>
 
 namespace DJI {
 
@@ -49,28 +52,27 @@ class ROSAdapter {
             }
         }
 
-
         static void broadcastCallback(CoreAPI *coreAPI, Header *header, void *userData) {
             ( (ROSAdapter*)userData )->m_broadcastCallback();
         }
 
-		static void fromMobileCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-			uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
-			uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
+        static void fromMobileCallback(CoreAPI *coreAPI, Header *header, void *userData) {
+            uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
+            uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
             ( (ROSAdapter*)userData )->m_fromMobileCallback(data, len);
-		}
+        }
 
-		static void missionStatusCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-			uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
-			uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
+        static void missionStatusCallback(CoreAPI *coreAPI, Header *header, void *userData) {
+            uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
+            uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
             ( (ROSAdapter*)userData )->m_missionStatusCallback(data, len);
-		}
+        }
 
-		static void missionEventCallback(CoreAPI *coreAPI, Header *header, void *userData) {
-			uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
-			uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
+        static void missionEventCallback(CoreAPI *coreAPI, Header *header, void *userData) {
+            uint8_t *data = ((unsigned char*) header) + sizeof(Header) + SET_CMD_SIZE;
+            uint8_t len = header->length - SET_CMD_SIZE - EXC_DATA_SIZE;
             ( (ROSAdapter*)userData )->m_missionEventCallback(data, len);
-		}
+        }
 
         void init(std::string device, unsigned int baudrate) {
             printf("--- Connection Info ---\n");
@@ -78,7 +80,7 @@ class ROSAdapter {
             printf("Baudrate: %u\n", baudrate);
             printf("-----\n");
 
-            m_hd = new HardDriver_Manifold(device, baudrate);
+            m_hd = new HardDriver_Unix(device, baudrate);
             m_hd->init();
 
             coreAPI = new CoreAPI( (HardDriver*)m_hd );
@@ -107,6 +109,9 @@ class ROSAdapter {
             coreAPI->activate(data, callback);
         }
 
+        BroadcastData getBroadcastData() {
+            return coreAPI->getBroadcastData();
+        }
 
         template<class T>
         void setBroadcastCallback( void (T::*func)(), T *obj ) {
@@ -114,23 +119,23 @@ class ROSAdapter {
             coreAPI->setBroadcastCallback(&ROSAdapter::broadcastCallback, (UserData)this);
         }
 
-		template<class T>
-		void setFromMobileCallback( void (T::*func)(uint8_t *, uint8_t), T *obj) {
-		m_fromMobileCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
-		coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
-		}
+        template<class T>
+        void setFromMobileCallback( void (T::*func)(uint8_t *, size_t), T *obj) {
+            m_fromMobileCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+            coreAPI->setFromMobileCallback(&ROSAdapter::fromMobileCallback, (UserData)this);
+        }
 
-		template<class T>
-		void setMissionStatusCallback( void (T::*func)(uint8_t *, uint8_t), T *obj) {
-		m_missionStatusCallback= std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
-		coreAPI->setWayPointCallback(&ROSAdapter::missionStatusCallback, (UserData)this);
-		}
+        template<class T>
+        void setMissionStatusCallback( void (T::*func)(uint8_t *, size_t), T *obj) {
+            m_missionStatusCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+            coreAPI->setWayPointCallback(&ROSAdapter::missionStatusCallback, (UserData)this);
+        }
 
-		template<class T>
-		void setMissionEventCallback( void (T::*func)(uint8_t *, uint8_t), T *obj) {
-		m_missionEventCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
-		coreAPI->setWayPointEventCallback(&ROSAdapter::missionEventCallback, (UserData)this);
-		}
+        template<class T>
+        void setMissionEventCallback( void (T::*func)(uint8_t *, size_t), T *obj) {
+            m_missionEventCallback = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+            coreAPI->setWayPointEventCallback(&ROSAdapter::missionEventCallback, (UserData)this);
+        }
 
 /*
         BroadcastData getBroadcastData() {
@@ -138,9 +143,9 @@ class ROSAdapter {
         }
 */
 
-		void sendToMobile(uint8_t *data, uint8_t len){
-			coreAPI->sendToMobile(data, len, NULL, NULL);
-		}
+        void sendToMobile(uint8_t *data, uint8_t len){
+            coreAPI->sendToMobile(data, len, NULL, NULL);
+        }
 
         void usbHandshake(std::string &device) {
             m_hd->usbHandshake(device);
@@ -158,17 +163,17 @@ class ROSAdapter {
 
 
     private:
-        HardDriver_Manifold *m_hd;
+        HardDriver_Unix *m_hd;
 
         pthread_t m_recvTid;
 
         std::function<void()> m_broadcastCallback;
 
-		std::function<void(uint8_t*, uint8_t)> m_fromMobileCallback;
+        std::function<void(uint8_t *, size_t)> m_fromMobileCallback;
 
-		std::function<void(uint8_t*, uint8_t)> m_missionStatusCallback;
+        std::function<void(uint8_t *, size_t)> m_missionStatusCallback;
 
-		std::function<void(uint8_t*, uint8_t)> m_missionEventCallback;
+        std::function<void(uint8_t *, size_t)> m_missionEventCallback;
 };
 
 

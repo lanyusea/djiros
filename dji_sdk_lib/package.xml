@@ -1,19 +1,21 @@
 <?xml version="1.0"?>
 <package>
   <name>dji_sdk_lib</name>
-  <version>0.0.0</version>
+  <version>3.1.0</version>
   <description>The dji_sdk_lib package</description>
 
-
-  <maintainer email="sdk@dji.com">DJI SDK</maintainer>
+  <maintainer email="norman.li@dji.com">Phoenix</maintainer>
 
   <license>BSD</license>
 
+  <url type="website">http://dev.dji.com/</url>
+
+  <author email="me@botao.hu">Botao Hu</author>  
+  <author email="norman.li@dji.com">Phoenix</author>
+
   <buildtool_depend>catkin</buildtool_depend>
 
-  <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
 
   </export>
 </package>

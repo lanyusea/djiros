@@ -1,5 +1,8 @@
-#include <dji_sdk/dji_sdk_node.h>
+#include "dji_sdk/dji_sdk_node.h"
+
 #include <algorithm>
+
+using namespace dji_sdk;
 
 bool DJISDKNode::process_waypoint(dji_sdk::Waypoint new_waypoint) 
 {
@@ -40,8 +43,8 @@ bool DJISDKNode::process_waypoint(dji_sdk::Waypoint new_waypoint)
         double d_lon = dst_longitude - global_position.longitude;
         double d_lat = dst_latitude - global_position.latitude;
 
-        flight_ctrl_data.x = ((d_lat) *C_PI/180) * C_EARTH;
-        flight_ctrl_data.y = ((d_lon) * C_PI/180) * C_EARTH * cos((dst_latitude)*C_PI/180);
+        flight_ctrl_data.x = ((d_lat) *M_PI/180) * C_EARTH;
+        flight_ctrl_data.y = ((d_lon) * M_PI/180) * C_EARTH * cos((dst_latitude)*M_PI/180);
         rosAdapter->flight->setFlight(&flight_ctrl_data);
 
         det_x = (100 * (dst_latitude - global_position.latitude))/dis_x;
@@ -71,102 +74,102 @@ bool DJISDKNode::process_waypoint(dji_sdk::Waypoint new_waypoint)
 }
 
 
-bool DJISDKNode::drone_task_action_callback(const dji_sdk::DroneTaskGoalConstPtr& goal)
+bool DJISDKNode::drone_task_action_callback(const dji_sdk::DroneTaskGoal::ConstPtr& goal)
 {
-  uint8_t request_action = goal->task;
+    uint8_t request_action = goal->task;
 
-  if (request_action == 1)
-  {
+    if (request_action == 1)
+    {
     //takeoff
     rosAdapter->flight->task(DJI::onboardSDK::Flight::TASK::TASK_TAKEOFF);
-  }
-  else if (request_action == 2)
-  {
+    }
+    else if (request_action == 2)
+    {
     //landing
     rosAdapter->flight->task(DJI::onboardSDK::Flight::TASK::TASK_LANDING);
-  }
-  else if (request_action == 3)
-  {
+    }
+    else if (request_action == 3)
+    {
     //gohome
     rosAdapter->flight->task(DJI::onboardSDK::Flight::TASK::TASK_GOHOME);
-  }
+    }
 
-  drone_task_feedback.progress = 1;
-  drone_task_action_server->publishFeedback(drone_task_feedback);
-  drone_task_action_server->setSucceeded();
-  
-  return true;
+    drone_task_feedback.progress = 1;
+    drone_task_action_server->publishFeedback(drone_task_feedback);
+    drone_task_action_server->setSucceeded();
+
+    return true;
 }
 
 
-bool DJISDKNode::local_position_navigation_action_callback(const dji_sdk::LocalPositionNavigationGoalConstPtr& goal)
+bool DJISDKNode::local_position_navigation_action_callback(const dji_sdk::LocalPositionNavigationGoal::ConstPtr& goal)
 {
-  /*IMPORTANT*/
-  /*
+    /*IMPORTANT*/
+    /*
      There has been declared a pointer `local_navigation_action` as the function parameter,
      However, it is the `local_navigation_action_server` that we should use.
      If `local_navigation_action` is used instead, there will be a runtime sengmentation fault.
 
      so interesting
-  */
+    */
 
-  float dst_x = goal->x;
-  float dst_y = goal->y;
-  float dst_z = goal->z;
+    float dst_x = goal->x;
+    float dst_y = goal->y;
+    float dst_z = goal->z;
 
-  float org_x = local_position.x;
-  float org_y = local_position.y;
-  float org_z = local_position.z;
+    float org_x = local_position.x;
+    float org_y = local_position.y;
+    float org_z = local_position.z;
 
-  float dis_x = dst_x - org_x;
-  float dis_y = dst_y - org_y;
-  float dis_z = dst_z - org_z; 
+    float dis_x = dst_x - org_x;
+    float dis_y = dst_y - org_y;
+    float dis_z = dst_z - org_z; 
 
-  float det_x, det_y, det_z;
+    float det_x, det_y, det_z;
 
-  DJI::onboardSDK::FlightData flight_ctrl_data;
-  flight_ctrl_data.flag = 0x90;
-  flight_ctrl_data.z = dst_z;
-  flight_ctrl_data.yaw = 0;
+    DJI::onboardSDK::FlightData flight_ctrl_data;
+    flight_ctrl_data.flag = 0x90;
+    flight_ctrl_data.z = dst_z;
+    flight_ctrl_data.yaw = 0;
 
-  int x_progress = 0; 
-  int y_progress = 0; 
-  int z_progress = 0; 
-  while (x_progress < 100 || y_progress < 100 || z_progress <100) {
+    int x_progress = 0; 
+    int y_progress = 0; 
+    int z_progress = 0; 
+    while (x_progress < 100 || y_progress < 100 || z_progress <100) {
 
-     flight_ctrl_data.x = dst_x - local_position.x;
-     flight_ctrl_data.y = dst_y - local_position.y;
-     rosAdapter->flight->setFlight(&flight_ctrl_data);
+        flight_ctrl_data.x = dst_x - local_position.x;
+        flight_ctrl_data.y = dst_y - local_position.y;
+        rosAdapter->flight->setFlight(&flight_ctrl_data);
 
-     det_x = (100 * (dst_x - local_position.x)) / dis_x;
-     det_y = (100 * (dst_y - local_position.y)) / dis_y;
-     det_z = (100 * (dst_z - local_position.z)) / dis_z;
+        det_x = (100 * (dst_x - local_position.x)) / dis_x;
+        det_y = (100 * (dst_y - local_position.y)) / dis_y;
+        det_z = (100 * (dst_z - local_position.z)) / dis_z;
 
-     x_progress = 100 - (int)det_x;
-     y_progress = 100 - (int)det_y;
-     z_progress = 100 - (int)det_z;
+        x_progress = 100 - (int)det_x;
+        y_progress = 100 - (int)det_y;
+        z_progress = 100 - (int)det_z;
 
-     //lazy evaluation
-     if (std::abs(dst_x - local_position.x) < 0.1) x_progress = 100;
-     if (std::abs(dst_y - local_position.y) < 0.1) y_progress = 100;
-     if (std::abs(dst_z - local_position.z) < 0.1) z_progress = 100;
+        //lazy evaluation
+        if (std::abs(dst_x - local_position.x) < 0.1) x_progress = 100;
+        if (std::abs(dst_y - local_position.y) < 0.1) y_progress = 100;
+        if (std::abs(dst_z - local_position.z) < 0.1) z_progress = 100;
 
-     local_position_navigation_feedback.x_progress = x_progress;
-     local_position_navigation_feedback.y_progress = y_progress;
-     local_position_navigation_feedback.z_progress = z_progress;
-     local_position_navigation_action_server->publishFeedback(local_position_navigation_feedback);
+        local_position_navigation_feedback.x_progress = x_progress;
+        local_position_navigation_feedback.y_progress = y_progress;
+        local_position_navigation_feedback.z_progress = z_progress;
+        local_position_navigation_action_server->publishFeedback(local_position_navigation_feedback);
 
-     usleep(20000);
-  }
+        usleep(20000);
+    }
 
-  local_position_navigation_result.result = true;
-  local_position_navigation_action_server->setSucceeded(local_position_navigation_result);
+    local_position_navigation_result.result = true;
+    local_position_navigation_action_server->setSucceeded(local_position_navigation_result);
 
-  return true;
+    return true;
 }
 
 
-bool DJISDKNode::global_position_navigation_action_callback(const dji_sdk::GlobalPositionNavigationGoalConstPtr& goal)
+bool DJISDKNode::global_position_navigation_action_callback(const dji_sdk::GlobalPositionNavigationGoal::ConstPtr& goal)
 {
     double dst_latitude = goal->latitude;
     double dst_longitude = goal->longitude;
@@ -201,8 +204,8 @@ bool DJISDKNode::global_position_navigation_action_callback(const dji_sdk::Globa
         double d_lon = dst_longitude - global_position.longitude;
         double d_lat = dst_latitude - global_position.latitude;
 
-        flight_ctrl_data.x = ((d_lat) *C_PI/180) * C_EARTH;
-        flight_ctrl_data.y = ((d_lon) * C_PI/180) * C_EARTH * cos((dst_latitude)*C_PI/180);
+        flight_ctrl_data.x = ((d_lat) * M_PI / 180) * C_EARTH;
+        flight_ctrl_data.y = ((d_lon) * M_PI / 180) * C_EARTH * cos((dst_latitude) * M_PI/180);
         rosAdapter->flight->setFlight(&flight_ctrl_data);
 
         det_x = (100* (dst_latitude - global_position.latitude))/dis_x;
@@ -236,7 +239,7 @@ bool DJISDKNode::global_position_navigation_action_callback(const dji_sdk::Globa
 }
 
 
-bool DJISDKNode::waypoint_navigation_action_callback(const dji_sdk::WaypointNavigationGoalConstPtr& goal)
+bool DJISDKNode::waypoint_navigation_action_callback(const dji_sdk::WaypointNavigationGoal::ConstPtr& goal)
 {
     dji_sdk::WaypointList new_waypoint_list;
     new_waypoint_list = goal->waypoint_list;

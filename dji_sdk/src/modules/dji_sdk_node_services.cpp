@@ -1,11 +1,12 @@
-#include <dji_sdk/dji_sdk_node.h>
+#include "dji_sdk/dji_sdk_node.h"
 
+using namespace dji_sdk;
 
 bool DJISDKNode::activation_callback(dji_sdk::Activation::Request& request, dji_sdk::Activation::Response& response)
 {
-	rosAdapter->coreAPI->activate(&user_act_data, NULL);
-	response.result = true;
-	return true;
+    rosAdapter->coreAPI->activate(&user_act_data, NULL);
+    response.result = true;
+    return true;
 }
 
 
@@ -206,9 +207,9 @@ bool DJISDKNode::velocity_control_callback(dji_sdk::VelocityControl::Request& re
 
 bool DJISDKNode::version_check_callback(dji_sdk::VersionCheck::Request& request, dji_sdk::VersionCheck::Response& response)
 {
-	rosAdapter->coreAPI->getVersion();
-	response.result = true;
-	return true;
+    rosAdapter->coreAPI->getVersion();
+    response.result = true;
+    return true;
 }
 
 
@@ -226,64 +227,64 @@ bool DJISDKNode::virtual_rc_enable_control_callback(dji_sdk::VirtualRCEnableCont
 
 bool DJISDKNode::virtual_rc_data_control_callback(dji_sdk::VirtualRCDataControl::Request& request, dji_sdk::VirtualRCDataControl::Response& response)
 {
-	DJI::onboardSDK::VirtualRCData vrc_data;
-	vrc_data.roll = request.channel_data[0];
-	vrc_data.pitch = request.channel_data[1];
-	vrc_data.throttle = request.channel_data[2];
-	vrc_data.yaw = request.channel_data[3];
-	vrc_data.gear = request.channel_data[4];
-	vrc_data.reserved = request.channel_data[5];
-	vrc_data.mode = request.channel_data[6];
-	vrc_data.Channel_07 = request.channel_data[7];
-	vrc_data.Channel_08 = request.channel_data[8];
-	vrc_data.Channel_09 = request.channel_data[9];
-	vrc_data.Channel_10 = request.channel_data[10];
-	vrc_data.Channel_11 = request.channel_data[11];
-	vrc_data.Channel_12 = request.channel_data[12];
-	vrc_data.Channel_13 = request.channel_data[13];
-	vrc_data.Channel_14 = request.channel_data[14];
-	vrc_data.Channel_15 = request.channel_data[15];
-	rosAdapter->virtualRC->sendData(vrc_data);
+    DJI::onboardSDK::VirtualRCData vrc_data;
+    vrc_data.roll = request.channel_data[0];
+    vrc_data.pitch = request.channel_data[1];
+    vrc_data.throttle = request.channel_data[2];
+    vrc_data.yaw = request.channel_data[3];
+    vrc_data.gear = request.channel_data[4];
+    vrc_data.reserved = request.channel_data[5];
+    vrc_data.mode = request.channel_data[6];
+    vrc_data.Channel_07 = request.channel_data[7];
+    vrc_data.Channel_08 = request.channel_data[8];
+    vrc_data.Channel_09 = request.channel_data[9];
+    vrc_data.Channel_10 = request.channel_data[10];
+    vrc_data.Channel_11 = request.channel_data[11];
+    vrc_data.Channel_12 = request.channel_data[12];
+    vrc_data.Channel_13 = request.channel_data[13];
+    vrc_data.Channel_14 = request.channel_data[14];
+    vrc_data.Channel_15 = request.channel_data[15];
+    rosAdapter->virtualRC->sendData(vrc_data);
 
-	response.result = true;
-	return true;
+    response.result = true;
+    return true;
 }
 
 
 bool DJISDKNode::drone_arm_control_callback(dji_sdk::DroneArmControl::Request& request, dji_sdk::DroneArmControl::Response& response)
 {
-	uint8_t arm = request.arm;
-	rosAdapter->flight->setArm((bool)arm);
+    uint8_t arm = request.arm;
+    rosAdapter->flight->setArm((bool)arm);
 
-	response.result = true;
-	return true;
+    response.result = true;
+    return true;
 }
 
 
 bool DJISDKNode::sync_flag_control_callback(dji_sdk::SyncFlagControl::Request& request, dji_sdk::SyncFlagControl::Response& response)
 {
-	uint32_t frequency = request.frequency;
-	rosAdapter->coreAPI->setSyncFreq(frequency);
+    uint32_t frequency = request.frequency;
+    rosAdapter->coreAPI->setSyncFreq(frequency);
 
-	response.result = true;
-	return true;
+    response.result = true;
+    return true;
 }
 
 
 bool DJISDKNode::message_frequency_control_callback(dji_sdk::MessageFrequencyControl::Request& request, dji_sdk::MessageFrequencyControl::Response& response)
 {
-	uint8_t message_frequency[16];
-	std::copy(request.frequency.begin(), request.frequency.end(), message_frequency);
-	rosAdapter->coreAPI->setBroadcastFreq(message_frequency);
+    uint8_t message_frequency[16];
+    std::copy(request.frequency.begin(), request.frequency.end(), message_frequency);
+    rosAdapter->coreAPI->setBroadcastFreq(message_frequency);
 
-	response.result = true;
-	return true;
+    response.result = true;
+    return true;
 }
 
 bool DJISDKNode::send_data_to_remote_device_callback(dji_sdk::SendDataToRemoteDevice::Request& request, dji_sdk::SendDataToRemoteDevice::Response& response)
 {
-	memcpy(transparent_transmission_data, &request.data[0], request.data.size());
-	rosAdapter->sendToMobile(transparent_transmission_data, request.data.size());
-	response.result = true;
-	return true;
+    memcpy(transparent_transmission_data, &request.data[0], request.data.size());
+    rosAdapter->sendToMobile(transparent_transmission_data, request.data.size());
+    response.result = true;
+    return true;
 }

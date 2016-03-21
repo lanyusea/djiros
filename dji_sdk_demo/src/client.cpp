@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include <stdio.h>
+#include <cstdio>
 #include <dji_sdk/dji_drone.h>
 #include <cstdlib>
 #include <actionlib/client/simple_action_client.h>
@@ -41,10 +41,9 @@ int main(int argc, char **argv)
     int temp32;
     bool valid_flag = false;
     bool err_flag = false;
-    ros::init(argc, argv, "sdk_client");
-    ROS_INFO("sdk_service_client_test");
+    ros::init(argc, argv, "dji_sdk_client");
     ros::NodeHandle nh;
-    DJIDrone* drone = new DJIDrone(nh);
+    dji_sdk::DJIDrone* drone = new dji_sdk::DJIDrone(nh);
 
 	//virtual RC test data
 	uint32_t virtual_rc_data[16];
@@ -251,7 +250,7 @@ int main(int argc, char **argv)
 
             case 'i':
                 /*draw circle sample*/
-                static float time = 0;
+                static float t = 0;
                 static float R = 2;
                 static float V = 2;
                 static float vx;
@@ -259,8 +258,8 @@ int main(int argc, char **argv)
                 /* start to draw circle */
                 for(int i = 0; i < 300; i ++)
                 {
-                    vx = V * sin((V/R)*time/50.0f);
-                    vy = V * cos((V/R)*time/50.0f);
+                    vx = V * sin((V / R) * t / 50.0f);
+                    vy = V * cos((V / R) * t / 50.0f);
         
                     drone->attitude_control( Flight::HorizontalLogic::HORIZONTAL_POSITION |
                             Flight::VerticalLogic::VERTICAL_VELOCITY |
@@ -269,7 +268,7 @@ int main(int argc, char **argv)
                             Flight::SmoothMode::SMOOTH_ENABLE,
                             vx, vy, 0, 0 );
                     usleep(20000);
-                    time++;
+                    t++;
                 }
                 break;
 

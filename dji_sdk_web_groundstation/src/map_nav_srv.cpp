@@ -19,7 +19,7 @@ typedef dji_sdk::WaypointNavigationAction WPAction_t;
 
 SimpleActionServer<Action_t>* asPtr_;
 
-DJIDrone* drone;
+dji_sdk::DJIDrone* drone;
 
 uint8_t cmdCode_ = 0;
 uint8_t stage_ = 0;
@@ -217,7 +217,7 @@ void ctrlCB(const std_msgs::Bool::ConstPtr& msg) {
 int main(int argc, char* argv[]) {
     ros::init(argc, argv, "map_nav_srv");
     ros::NodeHandle nh;
-    drone = new DJIDrone(nh);
+    drone = new dji_sdk::DJIDrone(nh);
     
     //web_waypoint_receive action server
     asPtr_ = new SimpleActionServer<Action_t>(
