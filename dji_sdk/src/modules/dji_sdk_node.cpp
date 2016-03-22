@@ -232,34 +232,47 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
 
     tf_prefix = tf::getPrefixParam(nh_private);
 
-    int uart_or_usb;
-    int A3_or_M100;
+    std::string connection_link;
+    std::string drone_model;
 
     nh_private.param("serial_name", serial_name, std::string("/dev/ttyTHS1"));
     nh_private.param("baud_rate", baud_rate, 230400);
     nh_private.param("app_id", app_id, 1022384);
     nh_private.param("app_version", app_version, 1);
     nh_private.param("enc_key", enc_key, std::string("e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"));
-
-    nh_private.param("uart_or_usb", uart_or_usb, 0); //choose uart as default
-    nh_private.param("A3_or_M100", A3_or_M100, 1); //choose M100 as default
+    nh_private.param("connection_link", connection_link, std::string("uart")); //choose uart as default
+    nh_private.param("drone_model", drone_model, std::string("m100")); //choose M100 as default
 
     // activation
     user_act_data.ID = app_id;
 
-    if ((uart_or_usb) && (A3_or_M100))
-    {
-        printf("M100 does not support USB API.\n");
+    if (connection_link != "usb" && connection_link != "uart") {
+        printf("connection_link '%s' should be 'uart' or 'usb'.\n", connection_link.data());
         return -1;
     }
 
-    if (A3_or_M100)
+    if (connection_link == "usb" && drone_model != "a3")
+    {
+        printf("Device released earlier than A3 does not support USB API.\n");
+        return -1;
+    }
+
+    if (drone_model == "a3")
+    {
+        user_act_data.version = 0x03016400;
+    }
+    else if (drone_model == "m100")
     {
         user_act_data.version = 0x03010a00;
     }
-    else
+    else if (drone_model == "inspire1")
     {
-        user_act_data.version = 0x03016400;
+        user_act_data.version = 0x03011e00;
+    }
+    else 
+    {
+        printf("drone_model '%s' should be 'a3', 'm100' or 'inspire1'.\n", drone_model.data());
+        return -1;
     }
 
     user_act_data.encKey = app_key;
@@ -269,10 +282,10 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     printf("app id: %d\n", user_act_data.ID);
     printf("app version: 0x0%X\n", user_act_data.version);
     printf("app key: %s\n", user_act_data.encKey);
-    printf("connection: %s\n", (uart_or_usb) ? "USB" : "UART");
+    printf("connection_link: %s\n", connection_link.data());
     printf("=================================================\n");
 
-    if (uart_or_usb) //use usb port for SDK
+    if (connection_link == "usb") //use usb port for SDK
     {
         rosAdapter->usbHandshake(serial_name);
     }

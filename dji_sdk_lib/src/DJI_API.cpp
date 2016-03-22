@@ -143,7 +143,7 @@ void CoreAPI::getVersion(CallBack callback, UserData userData)
 
 void CoreAPI::activate(ActivateData *data, CallBack callback, UserData userData)
 {
-    data->version = versionData.version;
+    //data->version = versionData.version;
     accountData = *data;
     accountData.reserved = 2;
 

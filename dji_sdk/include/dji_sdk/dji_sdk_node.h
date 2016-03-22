@@ -11,8 +11,6 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 
-#include <boost/bind.hpp>
-
 #define C_EARTH (double) 6378137.0
 #define TRANSPARNT_TRANSMISSION_MAXSIZE 100
 
@@ -177,22 +175,22 @@ private:
     {
         drone_task_action_server = new DroneTaskActionServer(nh, 
             "drone_task_action", 
-            boost::bind(&DJISDKNode::drone_task_action_callback, this, _1), false);
+            std::bind(&DJISDKNode::drone_task_action_callback, this, std::placeholders::_1), false);
         drone_task_action_server->start();
 
         global_position_navigation_action_server = new GlobalPositionNavigationActionServer(nh, 
             "global_position_navigation_action", 
-            boost::bind(&DJISDKNode::global_position_navigation_action_callback, this, _1), false );
+            std::bind(&DJISDKNode::global_position_navigation_action_callback, this, std::placeholders::_1), false );
         global_position_navigation_action_server->start();
 
         local_position_navigation_action_server = new LocalPositionNavigationActionServer(nh, 
             "local_position_navigation_action", 
-            boost::bind(&DJISDKNode::local_position_navigation_action_callback, this, _1), false);
+            std::bind(&DJISDKNode::local_position_navigation_action_callback, this, std::placeholders::_1), false);
         local_position_navigation_action_server->start();
 
         waypoint_navigation_action_server = new WaypointNavigationActionServer(nh, 
             "waypoint_navigation_action", 
-            boost::bind(&DJISDKNode::waypoint_navigation_action_callback, this, _1), false);
+            std::bind(&DJISDKNode::waypoint_navigation_action_callback, this, std::placeholders::_1), false);
         waypoint_navigation_action_server->start();
     }
 
