@@ -277,6 +277,7 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
         rosAdapter->usbHandshake(serial_name);
     }
 
+    rosAdapter = new DJI::onboardSDK::ROSAdapter;
     rosAdapter->init(serial_name, baud_rate);
     rosAdapter->activate(&user_act_data, NULL);
     rosAdapter->setBroadcastCallback(&DJISDKNode::broadcast_callback, this);

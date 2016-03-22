@@ -434,6 +434,8 @@ int main(int argc, char **argv)
 				break;
 
 			case 'v':
+                waypoint_task.mission_waypoint.clear();
+                
 				//mission waypoint upload
 				waypoint_task.velocity_range = 10;
 				waypoint_task.idle_velocity = 3;
