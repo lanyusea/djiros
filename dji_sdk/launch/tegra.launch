@@ -4,5 +4,6 @@
     <include file="$(find dji_sdk)/launch/dji_sdk_node.launch.xml">
         <arg name="serial_name" value="/dev/ttyTHS1"/>
         <arg name="drone_name" default="/" />
+		<arg name="drone_model" value="m100"/>
     </include>
 </launch>

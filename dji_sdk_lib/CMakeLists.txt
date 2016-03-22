@@ -30,12 +30,17 @@ catkin_package(
 include_directories(include/dji_sdk_lib)
 
 ## Declare a C++ library
-FILE(GLOB DJI_SDK_LIB_SOURCES src/*.cpp)
+file(GLOB DJI_SDK_LIB_SOURCES src/*.cpp)
 
 add_library(dji_sdk_lib
-	STATIC 
-	${DJI_SDK_LIB_SOURCES}
+    STATIC 
+    ${DJI_SDK_LIB_SOURCES}
 )
+
+if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+    target_compile_options(dji_sdk_lib PUBLIC -fPIC)
+endif()
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
