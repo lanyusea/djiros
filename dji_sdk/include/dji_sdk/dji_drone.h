@@ -1,5 +1,5 @@
-#ifndef __DJI_SDK_DJI_DRONE_H__
-#define __DJI_SDK_DJI_DRONE_H__
+#ifndef __DJI_SDK__DJI_DRONE_H__
+#define __DJI_SDK__DJI_DRONE_H__
 
 // Local includes
 #include "dji_sdk/dji_sdk.h"
@@ -115,7 +115,7 @@ public:
     dji_sdk::MissionEventWpUpload waypoint_upload_result;
 
     typedef std::function<void(const std::vector<uint8_t>&)> DataHandler;
-    std::vector<DataHandler> data_received_from_remote_device_callbacks;
+    DataHandler data_received_from_remote_device_callback;
 
 private:
     void acceleration_subscriber_callback(const dji_sdk::Acceleration::ConstPtr& acceleration)
@@ -190,8 +190,8 @@ private:
 
     void data_received_from_remote_device_subscriber_callback(const dji_sdk::TransparentTransmissionData::ConstPtr& tt_data)
     {
-        for (auto& callback: this->data_received_from_remote_device_callbacks) {
-            callback(tt_data->data);
+        if (this->data_received_from_remote_device_callback) {
+            this->data_received_from_remote_device_callback(tt_data->data);
         }
     }
 

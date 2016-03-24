@@ -5,13 +5,10 @@
   <description>A ROS package using DJI Onboard SDK. </description>
 
   <maintainer email="norman.li@dji.com">Phoenix</maintainer>
-
-  <license>BSD</license>
-
-  <url type="website">http://dev.dji.com/</url>
-
   <author email="me@botao.hu">Botao Amber Hu</author>  
   <author email="norman.li@dji.com">Phoenix</author>
+  <license>BSD</license>
+  <url type="website">http://dev.dji.com/</url>
 
   <buildtool_depend>catkin</buildtool_depend>
   
@@ -40,6 +37,6 @@
   <run_depend>tf</run_depend>
 
   <export>
-    <nodelet plugin="${prefix}/dji_sdk_nodelet.xml" />
+    <nodelet plugin="${prefix}/nodelet_plugins.xml" />
   </export>
 </package>

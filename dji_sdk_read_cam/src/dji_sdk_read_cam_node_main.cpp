@@ -1,5 +1,6 @@
+#include "dji_sdk_read_cam/dji_sdk_read_cam_node.h"
+
 #include <ros/ros.h>
-#include <dji_sdk_read_cam/dji_sdk_read_cam_node.h>
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "dji_sdk_read_cam_node");

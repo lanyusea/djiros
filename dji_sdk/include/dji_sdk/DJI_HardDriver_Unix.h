@@ -1,5 +1,5 @@
-#ifndef __DJI_SDK_DJI_HARDDRIVER_UNIX_H__
-#define __DJI_SDK_DJI_HARDDRIVER_UNIX_H__
+#ifndef __DJI_SDK__DJI_HARDDRIVER_UNIX_H__
+#define __DJI_SDK__DJI_HARDDRIVER_UNIX_H__
 
 #include <ros/ros.h>
 #include <dji_sdk_lib/DJI_Type.h>

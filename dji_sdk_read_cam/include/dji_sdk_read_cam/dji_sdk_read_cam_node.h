@@ -1,5 +1,5 @@
-#ifndef DJI_SDK_READ_CAM_NODE_H
-#define DJI_SDK_READ_CAM_NODE_H
+#ifndef __DJI_SDK__DJI_SDK_READ_CAM_NODE_H__
+#define __DJI_SDK__DJI_SDK_READ_CAM_NODE_H__
 
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>

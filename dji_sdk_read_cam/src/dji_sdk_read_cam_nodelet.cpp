@@ -1,6 +1,7 @@
+#include "dji_sdk_read_cam/dji_sdk_read_cam_node.h"
+
 #include <ros/ros.h>
 #include <pluginlib/class_list_macros.h>
-#include <dji_sdk_read_cam/dji_sdk_read_cam_node.h>
 #include <nodelet/nodelet.h>
 
 namespace dji_sdk {

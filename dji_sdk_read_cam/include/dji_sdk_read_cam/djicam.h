@@ -1,5 +1,5 @@
-#ifndef __DJICAM_H
-#define __DJICAM_H
+#ifndef __DJI_SDK__DJICAM_H__
+#define __DJI_SDK__DJICAM_H__
 
 #define DISPLAY_MODE            (1 << 0)
 #define GETBUFFER_MODE          (1 << 1)
