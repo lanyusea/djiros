@@ -137,8 +137,13 @@ bool DJISDKNode::local_position_navigation_action_callback(const dji_sdk::LocalP
     int z_progress = 0; 
     while (x_progress < 100 || y_progress < 100 || z_progress <100) {
 
-        flight_ctrl_data.x = dst_x - local_position.x;
-        flight_ctrl_data.y = dst_y - local_position.y;
+        if (use_ros_enu_tlu_system) {
+            flight_ctrl_data.y = dst_x - local_position.x;
+            flight_ctrl_data.x = dst_y - local_position.y;
+        } else {
+            flight_ctrl_data.x = dst_x - local_position.x;
+            flight_ctrl_data.y = dst_y - local_position.y;
+        }
         rosAdapter->flight->setFlight(&flight_ctrl_data);
 
         det_x = (100 * (dst_x - local_position.x)) / dis_x;

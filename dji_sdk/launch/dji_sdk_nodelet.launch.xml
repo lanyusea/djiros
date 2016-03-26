@@ -7,6 +7,7 @@
     <arg name="drone_name" default="/" />
     <arg name="connection_link" default="uart" />  <!-- uart, usb. choose uart as default -->
     <arg name="drone_model" default="m100" /> <!-- m100, a3, inspire1. -->
+    <arg name="use_ros_enu_tlu_system" default="true" />
 
     <node pkg="nodelet" type="nodelet" name="dji_sdk_node" args="load dji_sdk/DJISDKNodelet $(arg manager)" output="screen" ns="$(arg drone_name)">
         <!-- node parameters -->
@@ -20,6 +21,7 @@
         <param name="enable_groundstation" type="int" value="1"/>
         <param name="connection_link" type="string" value="$(arg connection_link)"/> 
         <param name="drone_model" type="string" value="$(arg drone_model)"/>  
+        <param name="use_ros_enu_tlu_system" type="bool" value="$(arg use_ros_enu_tlu_system)" /> 
     </node>
 
     <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager" output="screen" if="$(arg start_nodelet_manager)"/>

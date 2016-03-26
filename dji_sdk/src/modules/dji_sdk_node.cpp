@@ -28,7 +28,7 @@ void DJISDKNode::broadcast_callback()
 
     auto current_time = ros::Time::now();
 
-    if(msg_flags & HAS_TIME){
+    if(msg_flags & HAS_TIME) {
         time_stamp.header.frame_id = "/time";
         time_stamp.header.stamp = current_time;
         time_stamp.time = bc_data.timeStamp.time;
@@ -41,13 +41,23 @@ void DJISDKNode::broadcast_callback()
     if ( (msg_flags & HAS_Q) && (msg_flags & HAS_W) ) {
         attitude_quaternion.header.frame_id = "/world";
         attitude_quaternion.header.stamp = current_time;
-        attitude_quaternion.q0 = bc_data.q.q0;
-        attitude_quaternion.q1 = bc_data.q.q1;
-        attitude_quaternion.q2 = bc_data.q.q2;
-        attitude_quaternion.q3 = bc_data.q.q3;
-        attitude_quaternion.wx = bc_data.w.x;
-        attitude_quaternion.wy = bc_data.w.y;
-        attitude_quaternion.wz = bc_data.w.z;
+        if (use_ros_enu_tlu_system) {
+            attitude_quaternion.q0 = (bc_data.q.q0 + bc_data.q.q3) / sqrt(2);
+            attitude_quaternion.q1 = (bc_data.q.q1 + bc_data.q.q2) / sqrt(2);
+            attitude_quaternion.q2 = (bc_data.q.q1 - bc_data.q.q2) / sqrt(2);
+            attitude_quaternion.q3 = (bc_data.q.q0 - bc_data.q.q3) / sqrt(2);
+            attitude_quaternion.wx = bc_data.w.y;
+            attitude_quaternion.wy = bc_data.w.x;
+            attitude_quaternion.wz = bc_data.w.z;
+        } else {
+            attitude_quaternion.q0 = bc_data.q.q0;
+            attitude_quaternion.q1 = bc_data.q.q1;
+            attitude_quaternion.q2 = bc_data.q.q2;
+            attitude_quaternion.q3 = bc_data.q.q3;
+            attitude_quaternion.wx = bc_data.w.x;
+            attitude_quaternion.wy = bc_data.w.y;
+            attitude_quaternion.wz = bc_data.w.z;            
+        }
         attitude_quaternion.ts = bc_data.timeStamp.time;
         attitude_quaternion_publisher.publish(attitude_quaternion);
     }
@@ -74,7 +84,7 @@ void DJISDKNode::broadcast_callback()
         //update local_position msg
         local_position.header.frame_id = "/world";
         local_position.header.stamp = current_time;
-        gps_convert_ned(
+        gps_convert(
                 local_position.x,
                 local_position.y,
                 global_position.longitude,
@@ -94,9 +104,15 @@ void DJISDKNode::broadcast_callback()
         velocity.header.frame_id = "/world";
         velocity.header.stamp = current_time;
         velocity.ts = bc_data.timeStamp.time;
-        velocity.vx = bc_data.v.x;
-        velocity.vy = bc_data.v.y;
-        velocity.vz = bc_data.v.z;
+        if (use_ros_enu_tlu_system) {
+            velocity.vx = bc_data.v.y;
+            velocity.vy = bc_data.v.x;
+            velocity.vz = bc_data.v.z;
+        } else {
+            velocity.vx = bc_data.v.x;
+            velocity.vy = bc_data.v.y;
+            velocity.vz = bc_data.v.z;
+        }
         velocity.health_flag = bc_data.v.health;
         velocity_publisher.publish(velocity);
     }
@@ -106,9 +122,15 @@ void DJISDKNode::broadcast_callback()
         acceleration.header.frame_id = "/world";
         acceleration.header.stamp = current_time;
         acceleration.ts = bc_data.timeStamp.time;
-        acceleration.ax = bc_data.a.x;
-        acceleration.ay = bc_data.a.y;
-        acceleration.az = bc_data.a.z;
+        if (use_ros_enu_tlu_system) {
+            acceleration.ax = bc_data.a.y;
+            acceleration.ay = bc_data.a.x;
+            acceleration.az = bc_data.a.z;
+        } else {
+            acceleration.ax = bc_data.a.x;
+            acceleration.ay = bc_data.a.y;
+            acceleration.az = bc_data.a.z;            
+        }
         acceleration_publisher.publish(acceleration);
     }
 
@@ -178,9 +200,15 @@ void DJISDKNode::broadcast_callback()
         compass.header.frame_id = "/world";
         compass.header.stamp = current_time;
         compass.ts = bc_data.timeStamp.time;
-        compass.x = bc_data.mag.x;
-        compass.y = bc_data.mag.y;
-        compass.z = bc_data.mag.z;
+        if (use_ros_enu_tlu_system) {
+            compass.x = bc_data.mag.y;
+            compass.y = bc_data.mag.x;
+            compass.z = bc_data.mag.z;
+        } else {
+            compass.x = bc_data.mag.x;
+            compass.y = bc_data.mag.y;
+            compass.z = bc_data.mag.z;            
+        }
         compass_publisher.publish(compass);
     }
 
@@ -240,6 +268,7 @@ int DJISDKNode::init_parameters(ros::NodeHandle& nh_private)
     nh_private.param("enc_key", enc_key, std::string("e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"));
     nh_private.param("connection_link", connection_link, std::string("uart")); //choose uart as default
     nh_private.param("drone_model", drone_model, std::string("m100")); //choose M100 as default
+    nh_private.param("use_ros_enu_tlu_system", use_ros_enu_tlu_system, true); //choose M100 as default
 
     // activation
     user_act_data.ID = app_id;
@@ -323,7 +352,7 @@ DJISDKNode::~DJISDKNode()
         delete dji_sdk_mission;
 }
 
-inline void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
+void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
             double gps_t_lon, double gps_t_lat,
             double gps_r_lon, double gps_r_lat)
 {
@@ -333,10 +362,21 @@ inline void DJISDKNode::gps_convert_ned(float &ned_x, float &ned_y,
     ned_y = DEG2RAD(d_lon) * C_EARTH * cos(DEG2RAD(gps_t_lat));
 }
 
-dji_sdk::LocalPosition DJISDKNode::gps_convert_ned(dji_sdk::GlobalPosition loc)
+void DJISDKNode::gps_convert(float &x, float &y,
+            double gps_t_lon, double gps_t_lat,
+            double gps_r_lon, double gps_r_lat)
+{
+    if (use_ros_enu_tlu_system) {
+        gps_convert_ned(y, x, gps_t_lon, gps_t_lat, gps_r_lon, gps_r_lat);
+    } else {
+        gps_convert_ned(x, y, gps_t_lon, gps_t_lat, gps_r_lon, gps_r_lat);
+    }
+}
+
+dji_sdk::LocalPosition DJISDKNode::gps_convert(dji_sdk::GlobalPosition loc)
 {
     dji_sdk::LocalPosition local;
-    gps_convert_ned(local.x, local.y,
+    gps_convert(local.x, local.y,
         loc.longitude, loc.latitude,
         global_position_ref.longitude, global_position_ref.latitude
     );

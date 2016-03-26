@@ -14,8 +14,13 @@ bool DJISDKNode::attitude_control_callback(dji_sdk::AttitudeControl::Request& re
 {
     DJI::onboardSDK::FlightData flight_ctrl_data;
     flight_ctrl_data.flag = request.flag;
-    flight_ctrl_data.x = request.x;
-    flight_ctrl_data.y = request.y;
+    if (use_ros_enu_tlu_system) {
+        flight_ctrl_data.x = request.y;
+        flight_ctrl_data.y = request.x;
+    } else {
+        flight_ctrl_data.x = request.x;
+        flight_ctrl_data.y = request.y;
+    }
     flight_ctrl_data.z = request.z;
     flight_ctrl_data.yaw = request.yaw;
 
@@ -118,15 +123,20 @@ bool DJISDKNode::global_position_control_callback(dji_sdk::GlobalPositionControl
         return false;
     }
 
-    gps_convert_ned(dst_x, 
+    gps_convert(dst_x, 
             dst_y,
             request.longitude, request.latitude,
             global_position.longitude,  global_position.latitude);
 
     DJI::onboardSDK::FlightData flight_ctrl_data;
     flight_ctrl_data.flag = 0x90;
-    flight_ctrl_data.x = dst_x - local_position.x;
-    flight_ctrl_data.y = dst_y - local_position.y;
+    if (use_ros_enu_tlu_system) {
+        flight_ctrl_data.y = dst_x - local_position.x;
+        flight_ctrl_data.x = dst_y - local_position.y;
+    } else {
+        flight_ctrl_data.x = dst_x - local_position.x;
+        flight_ctrl_data.y = dst_y - local_position.y;        
+    }
     flight_ctrl_data.z = dst_z;
     flight_ctrl_data.yaw = request.yaw;
 
@@ -152,8 +162,13 @@ bool DJISDKNode::local_position_control_callback(dji_sdk::LocalPositionControl::
 
     DJI::onboardSDK::FlightData flight_ctrl_data;
     flight_ctrl_data.flag = 0x90;
-    flight_ctrl_data.x = dst_x - local_position.x;
-    flight_ctrl_data.y = dst_y - local_position.y;
+    if (use_ros_enu_tlu_system) {
+        flight_ctrl_data.y = dst_x - local_position.x;
+        flight_ctrl_data.x = dst_y - local_position.y;
+    } else {
+        flight_ctrl_data.x = dst_x - local_position.x;
+        flight_ctrl_data.y = dst_y - local_position.y;        
+    }
     flight_ctrl_data.z = dst_z;
     flight_ctrl_data.yaw = request.yaw;
 
@@ -193,8 +208,14 @@ bool DJISDKNode::velocity_control_callback(dji_sdk::VelocityControl::Request& re
         //body frame
         flight_ctrl_data.flag = 0x43;
 
-    flight_ctrl_data.x = request.vx;
-    flight_ctrl_data.y = request.vy;
+    if (use_ros_enu_tlu_system) {
+        flight_ctrl_data.x = request.vy;
+        flight_ctrl_data.y = request.vx;
+    } else {
+        flight_ctrl_data.x = request.vx;
+        flight_ctrl_data.y = request.vy;    
+    }
+
     flight_ctrl_data.z = request.vz;
     flight_ctrl_data.yaw = request.yawAngle;
 

@@ -5,6 +5,7 @@
     <arg name="drone_name" default="/" />
     <arg name="connection_link" default="uart" />  <!-- uart, usb. choose uart as default -->
     <arg name="drone_model" default="m100" /> <!-- m100, a3, inspire1. -->
+    <arg name="use_ros_enu_tlu_system" default="true" />
 
     <node pkg="dji_sdk" type="dji_sdk_node" name="dji_sdk_node" output="screen" ns="$(arg drone_name)">
         <!-- node parameters -->
@@ -17,6 +18,7 @@
         <param name="enc_key" type="string" value="e7bad64696529559318bb35d0a8c6050d3b88e791e1808cfe8f7802150ee6f0d"/>
         <param name="enable_groundstation" type="int" value="1"/>
         <param name="connection_link" type="string" value="$(arg connection_link)"/> 
-        <param name="drone_model" type="string" value="$(arg drone_model)"/>  
+        <param name="drone_model" type="string" value="$(arg drone_model)"/>
+        <param name="use_ros_enu_tlu_system" type="bool" value="$(arg use_ros_enu_tlu_system)" /> 
     </node>
 </launch>

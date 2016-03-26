@@ -197,6 +197,7 @@ private:
 //Transform:
     std::string tf_prefix;
     tf::TransformBroadcaster br;
+    bool use_ros_enu_tlu_system = true;
 
 public:
     DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
@@ -212,8 +213,12 @@ private:
     void gps_convert_ned(float &ned_x, float &ned_y,
             double gps_t_lon, double gps_t_lat,
             double gps_r_lon, double gps_r_lat);
+    
+    void gps_convert(float &x, float &y,
+            double gps_t_lon, double gps_t_lat,
+            double gps_r_lon, double gps_r_lat);
 
-    dji_sdk::LocalPosition gps_convert_ned(dji_sdk::GlobalPosition loc);
+    dji_sdk::LocalPosition gps_convert(dji_sdk::GlobalPosition loc);
 };
 
 }
